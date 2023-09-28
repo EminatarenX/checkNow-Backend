@@ -56,6 +56,7 @@ const emailRegistro = async(datos) => {
                     display: flex;
                     flex-direction: column;
                     align-items: center;
+                    animation: fade 0.5s ease ;
                 }
         
                 h1 {
@@ -78,14 +79,27 @@ const emailRegistro = async(datos) => {
                     border-radius: 0.25rem;
                     font-size: 1.25rem;
                     margin-top: 1.25rem;
+                    transition: all 0.4s ease;
                 }
         
                 .btn:hover {
                     background-color: #12EE2A;
+                    scale: 1.1;
                 }
         
                 .text-muted {
                     color: #718096;
+                }
+
+                @keyframes fade {
+                    from {
+                        opacity: 0;
+                        transform: translateY(1rem);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
                 }
             </style>
         
