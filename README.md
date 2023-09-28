@@ -2,7 +2,7 @@
 
 Backend de Check Now, una aplicación planeada para innovar en el sector laboral para empresas dedicadas a la administración. Check Now es ideal para personas que suelen tener problemas para gestionar a sus trabajadores, ya sea en horarios de entrada y salida, calculando salarios, etc.
 
-## Funciones dentro del Back-End
+## Funciones dentro de src/controllers
 
 Dentro del backend, tenemos el modelo de usuarios, en el cual se necesitan agregar inicialmente el correo y la contraseña del usuario. Este es el primer paso para registrarse como usuario.
 
