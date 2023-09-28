@@ -28,3 +28,26 @@ const salt = await bcrypt.genSalt(10)
 const hashedPassword = await bcrypt.hash(password, salt)
 const token = generarID()
 ```
+
+Despues de generar estos parametros, podemos usarlos para enviar un correo a nuestro usuario con las siguientes lineas de codigo, y procedemos a guardarlo en la base de datos: 
+
+```js
+emailRegistro({correo, token})
+
+const usuario = new Usuario({
+  correo,
+  password: hashedPassword,
+  token
+})
+await usuario.save()
+```
+si todo sale bien, retornamos un mensaje de exito, con los datos del usuario y con un mensaje de aviso para notificar al usuario del mensaje que ha sido enviado a su correo para confirmar su cuenta: 
+```js
+return res.json({
+  msg: {
+    titulo: "Cuenta creada!",
+    cuerpo: "Hemos enviado un mensaje de verificación a tu correo electrónico"
+  },
+  usuario
+})
+```     
