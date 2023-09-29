@@ -6,9 +6,9 @@ Backend de Check Now, una aplicación planeada para innovar en el sector laboral
 
 Dentro del backend, tenemos el modelo de usuarios, en el cual se necesitan agregar inicialmente el correo y la contraseña del usuario. Este es el primer paso para registrarse como usuario.
 
-### obtenerUsuarios()
+### crearUsuario
 
-Dentro de `controllers/usuario.js`, puedes encontrar la función **`obtenerUsuarios()`**. Primeramente, `req.body` solo recibe un correo y una contraseña de la siguiente manera:
+Dentro de `controllers/usuario.js`, puedes encontrar la función **`crearUsuario()`**. Primeramente, `req.body` solo recibe un correo y una contraseña de la siguiente manera:
 
 ```js
 const { correo, password } = req.body; 
