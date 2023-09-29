@@ -16,7 +16,8 @@ const UsuarioSchema = mongoose.Schema({
     correo: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        trim: true
     },
     password: {
         type: String,
@@ -24,7 +25,6 @@ const UsuarioSchema = mongoose.Schema({
     },
     token: {
         type: String,
-        required: true
     },
     role: {
         type: String,
