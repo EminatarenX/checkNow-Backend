@@ -107,13 +107,13 @@ const iniciarSesion = async (req, res) => {
 }
 
 const confirmarUsuario = async(req, res) =>{
-    const { id } = req.params
+    const { token } = req.params
 
     try {
-        let usuario = await Usuario.findById(id)
+        let usuario = await Usuario.findOne({token})
 
         if(!usuario){
-            const error = new Error("El usuario no existe")
+            const error = new Error("El usuario ya ha sido confirmado")
             return res.status(404).json({msg: error.message})
         }
         

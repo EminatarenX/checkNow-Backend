@@ -9,5 +9,5 @@ router.get('/', usuariosController.obtenerUsuarios)
 router.post("/", usuariosController.crearUsuario)
 router.post("/insertar", checkAuth ,usuariosController.completarPerfil)
 router.post("/login", usuariosController.iniciarSesion)
-router.get("/confirmar/:id", usuariosController.confirmarUsuario)
+router.get("/confirmar/:token", usuariosController.confirmarUsuario)
 export default router
