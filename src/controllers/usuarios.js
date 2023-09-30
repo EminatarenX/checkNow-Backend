@@ -5,10 +5,10 @@ import { emailRegistro } from "../helpers/confirmarCuenta.js"
 import { response } from "express"
 import jwt from 'jsonwebtoken'
 
-const obtenerUsuarios = async(req, res) => {
+const obtenerUsuarios = async (req, res) => {
     //crear una variable por si pone un usuario especifico
     const { usuarioId } = req.params
-    if(usuarioId) {
+    if (usuarioId) {
         try {
             const usuario = await Usuario.findById(usuarioId)
             return res.json(usuario)
@@ -30,11 +30,11 @@ const crearUsuario = async (req, res) => {
     const { correo, password } = req.body
 
     try {
-        const usuarioExiste = await Usuario.findOne({correo})
+        const usuarioExiste = await Usuario.findOne({ correo })
 
-        if(usuarioExiste) {
+        if (usuarioExiste) {
             const error = new Error("El usuario ya esta registrado")
-            return res.status(400).json({msg: error.message})
+            return res.status(400).json({ msg: error.message })
         }
 
         const salt = await bcrypt.genSalt(10)
@@ -43,10 +43,10 @@ const crearUsuario = async (req, res) => {
 
         const token = generarID()
 
-        emailRegistro({correo, token})
+        emailRegistro({ correo, token })
 
         const usuario = new Usuario({
-            correo, 
+            correo,
             password: hashedPassword,
             token
         })
@@ -62,9 +62,9 @@ const crearUsuario = async (req, res) => {
             },
             usuario
         })
-        
+
     } catch (error) {
-        return res.status(400).json({msg: "Hubo un error, Intenta mas tarde", error})
+        return res.status(400).json({ msg: "Hubo un error, Intenta mas tarde", error })
     }
 }
 
@@ -72,26 +72,26 @@ const iniciarSesion = async (req, res) => {
     const { correo, password } = req.body
 
     try {
-        const existeUsuario = await Usuario.findOne({correo})
+        const existeUsuario = await Usuario.findOne({ correo })
 
-        if(!existeUsuario) {
+        if (!existeUsuario) {
             const error = new Error("El usuario no existe")
-            return res.status(400).json({msg: error.message})
+            return res.status(400).json({ msg: error.message })
         }
 
-        if(existeUsuario.token) {
+        if (existeUsuario.token) {
             const error = new Error("El usuario no esta verificado")
-            return res.status(400).json({msg: error.message})
+            return res.status(400).json({ msg: error.message })
         }
 
         const passwordCorrecto = await bcrypt.compare(password, existeUsuario.password)
 
-        if(!passwordCorrecto) {
+        if (!passwordCorrecto) {
             const error = new Error("Contraseña incorrecta")
-            return res.status(400).json({msg: error.message})
+            return res.status(400).json({ msg: error.message })
         }
 
-        const token = jwt.sign({id: existeUsuario._id}, process.env.JWT_SECRET, {expiresIn: "30m"})
+        const token = jwt.sign({ id: existeUsuario._id }, process.env.JWT_SECRET, { expiresIn: "30m" })
 
         return res.json({
             msg: {
@@ -106,17 +106,17 @@ const iniciarSesion = async (req, res) => {
     }
 }
 
-const confirmarUsuario = async(req, res) =>{
+const confirmarUsuario = async (req, res) => {
     const { token } = req.params
 
     try {
-        let usuario = await Usuario.findOne({token})
+        let usuario = await Usuario.findOne({ token })
 
-        if(!usuario){
+        if (!usuario) {
             const error = new Error("El usuario ya ha sido confirmado")
-            return res.status(404).json({msg: error.message})
+            return res.status(404).json({ msg: error.message })
         }
-        
+
         usuario.token = ""
 
         await usuario.save()
@@ -133,41 +133,45 @@ const confirmarUsuario = async(req, res) =>{
 }
 
 const completarPerfil = async (req, res) => {
-    const { nombre, apellido, telefono, direccion, role,  } = req.body
-    const usuarioAutenticado = req.usuario
+    const { nombre, apellidos, telefono, direccion, role } = req.body
+    
+    const { id: usuario_id } = req.usuario
 
 
-    console.log(usuarioAutenticado)
-    return
     try {
+        let usuario = await Usuario.findById(usuario_id)
 
-        // const usuario = await Usuario.findOne({token})
+        if (!usuario) {
+            const error = new Error("El usuario no existe")
+            return res.status(400).json({ msg: error.message })
+        }
 
-        // if(!usuario) {
-        //     const error = new Error("El usuario no existe")
-        //     return res.status(400).json({msg: error.message})
-        // }
+        const existeTelefono = await Usuario.findOne({ telefono })
 
-        // usuario.nombre = nombre
-        // usuario.apellido = apellido
-        // usuario.telefono = telefono
-        // usuario.direccion = direccion
-        // usuario.token = token
-        // usuario.role = role
+        if(existeTelefono && existeTelefono._id != usuario_id){
+            const error = new Error("El telefono ya esta registrado")
+            return res.status(400).json({ msg: error.message })
+        }
 
-        // await usuario.save()
+        usuario.nombre = nombre
+        usuario.apellidos = apellidos
+        usuario.telefono = telefono
+        usuario.direccion = direccion
+        usuario.role = role
+
+        await usuario.save()
 
         return res.json({
             msg: {
                 titulo: "¡Registro completado!",
-                cuerpo: nombre + " " + apellido + " ya puedes iniciar sesión"
+                usuario
 
             },
-            // usuario
+ 
         })
-        
+
     } catch (error) {
-        return res.status(400).json({msg: "Hubo un error, Intenta mas tarde", error})
+        return res.status(400).json({ msg: "Hubo un error, Intenta mas tarde", error })
     }
 }
 

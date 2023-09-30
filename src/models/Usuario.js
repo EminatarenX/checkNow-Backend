@@ -13,6 +13,16 @@ const UsuarioSchema = mongoose.Schema({
         type: String,
 
     },
+    telefono: {
+        type: String,
+        length: 10,
+        trim: true,
+        unique: true,
+    },
+    direccion: {
+        type : String, 
+        
+    },
     correo: {
         type: String,
         required: true,
