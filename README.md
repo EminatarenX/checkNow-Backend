@@ -52,4 +52,39 @@ return res.json({
   },
   usuario
 })
-```     
+```
+
+### confirmarUsuario
+
+la funcon confirmar usuario es producto de el correo que se envia al usuario para confirmar su identidad por medio de un mail, la funcion espera los siguientes datos por medio de params:
+
+```js
+const { token } = req.params
+```
+
+seguido de extraer el token de los params enviados desde el frontend, hacemos una busqueda de el usuario dentro de un bloque de **trycatch** por medio de ese token para despues de ello borrarlo. De esa manera confirmamos al usuario:
+
+```js
+try {
+  // buscamos al usuario con el token
+  let usuario = await Usuario.findOne({ token })
+
+  //si no existe significa que ya ha sido confirmado
+  // o que nunca existio
+  if (!usuario) {
+    const error = new Error("El usuario ya ha sido confirmado")
+    return res.status(404).json({ msg: error.message })
+  }
+
+  usuario.token = ""
+
+  await usuario.save()
+
+  // retornamos un mensaje de exito 
+  return res.status(200).json({
+    msg: {
+      titulo: "Cuenta verificada!",
+      cuerpo: "Ahora puedes iniciar sesion :)"
+    }
+  })
+```
