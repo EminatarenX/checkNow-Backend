@@ -65,7 +65,6 @@ const { token } = req.params
 seguido de extraer el token de los params enviados desde el frontend, hacemos una busqueda de el usuario dentro de un bloque de **trycatch** por medio de ese token para despues de ello borrarlo. De esa manera confirmamos al usuario:
 
 ```js
-try {
   // buscamos al usuario con el token
   let usuario = await Usuario.findOne({ token })
 
@@ -88,3 +87,53 @@ try {
     }
   })
 ```
+
+### iniciarSesion 
+
+Iniciar sesion unicamente espera un json por medio de `req.body` de la siguiente manera:
+```json
+{
+  "correo" : "usuario@correo.com",
+  "password" : "contrasenia_del_usuario"
+}
+```
+Seguido de recibir estos datos, dentro de un bloque de `trycatch` hacemos una busqueda de ese usuario, por medio del correo: 
+
+```js
+const existeUsuario = await Usuario.findOne({ correo })
+
+// si el usuario no existe retornamos un mensaje de error
+if (!existeUsuario) {
+  const error = new Error("El usuario no existe")
+  return res.status(400).json({ msg: error.message })
+}
+```
+Seguido de verificar que existe, se verifica si el usuario tiene el token de confirmacion, si lo tiene significa que el usuario no esta confirmado:
+```js
+if (existeUsuario.token) {
+  const error = new Error("El usuario no esta verificado")
+  return res.status(400).json({ msg: error.message })
+}
+```
+si todo es correcto verificamos si la contraseña que estamos recibiendo coincide con la contraseña hasheada dentro del backend usando `compare` de la libreria **bcrypt**,
+si las contraseñas coinciden se genera un JsonWebToken ( JWT ) donde firmamos con la palabra secretta `JWT_SECRET`, tiempo de expiracion y el id del usuario para facilitar las consultas con middlewares: 
+```js
+
+const passwordCorrecto = await bcrypt.compare(password, existeUsuario.password)
+
+if (!passwordCorrecto) {
+  const error = new Error("Contraseña incorrecta")
+  return res.status(400).json({ msg: error.message })
+}
+
+const token = jwt.sign({ id: existeUsuario._id }, process.env.JWT_SECRET, { expiresIn: "30m" })
+
+// mensaje de exito, junto con el token para que el front pueda almacenarlo
+// y usarlo para realizar consultas al backend
+return res.json({
+  msg: {
+    titulo: "¡Bienvenido!",
+    cuerpo: "Has iniciado sesión correctamente"
+  },
+  token
+})
