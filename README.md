@@ -9,7 +9,13 @@ Dentro del backend, tenemos el modelo de usuarios, en el cual se necesitan agreg
 ### crearUsuario
 
 Dentro de `controllers/usuario.js`, puedes encontrar la función **`crearUsuario()`**. Primeramente, `req.body` solo recibe un correo y una contraseña de la siguiente manera:
-
+```json
+{
+  "correo" : "correo@usuario.com",
+  "password" : "password_usuario"
+}
+```
+Recibimos dentro de la funcion como: 
 ```js
 const { correo, password } = req.body; 
 ```
