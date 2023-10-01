@@ -121,7 +121,7 @@ if (existeUsuario.token) {
   return res.status(400).json({ msg: error.message })
 }
 ```
-si todo es correcto verificamos si la contraseña que estamos recibiendo coincide con la contraseña hasheada dentro del backend usando `compare` de la libreria **bcrypt**,
+si todo es correcto verificamos si la contraseña que estamos recibiendo coincide con la contraseña hasheada dentro del backend usando `compare()` de la libreria *bcrypt*,
 si las contraseñas coinciden se genera un JsonWebToken ( JWT ) donde firmamos con la palabra secretta `JWT_SECRET`, tiempo de expiracion y el id del usuario para facilitar las consultas con middlewares: 
 ```js
 
