@@ -143,3 +143,104 @@ return res.json({
   },
   token
 })
+
+```
+### solicitarCambioPassword
+Esta funcion es la encargada de enviar un correo al usuario para que pueda cambiar su contraseña, esta funcion recibe un correo por medio de `req.body` de la siguiente manera: 
+
+```json
+{
+  "correo" : "alguien@example.com"
+}
+```
+Seguido de recibir el correo, se verifica si el usuario existe, si no existe se retorna un mensaje de error:
+
+```js
+const usuario = await Usuario.findOne({ correo })
+
+if (!usuario) {
+  const error = new Error("El usuario no existe")
+  return res.status(400).json({ msg: error.message })
+}
+```
+
+Seguido de verificar que el usuario existe, se genera un token y se guarda en la base de datos: 
+
+```js
+const token = generarID()
+
+usuario.token = token
+
+await usuario.save();
+```
+Despues de esto se envia un correo al usuario con el token generado, para que pueda cambiar su contraseña, y se retorna un mensaje de exito: 
+
+```js
+emailCambioPassword({ correo, token })
+
+return res.json({
+  msg: {
+    titulo: "Correo enviado!",
+    cuerpo: "Hemos enviado un correo para que puedas cambiar tu contraseña"
+  }
+})
+```
+
+### cambiarPassword
+Esta función solo funcionará (valgase la redundancia) con el token que se envia al correo del usuario, esta funcion recibe el token por medio de `req.params` de la siguiente manera: 
+```js
+const { token } = req.params
+```
+
+Seguido de recibir el token, se verifica si el usuario solicitó el cambio de contraseña, si no, se retorna un mensaje de error:
+
+```js
+const usuario = await Usuario.findOne({ token })
+
+if(!usuario) {
+  const error = new Error("El usuario no ha solicitado el cambio de contraseña")
+  return res.status(400).json({ msg: error.message })
+}
+```
+Si el usuario existe, se verifica que el token no haya expirado, si ya expiró se retorna un mensaje de error: 
+
+```js
+const tokenExpirado = Date.now() - usuario.updatedAt.getTime() > 3600000
+
+if(tokenExpirado) {
+  const error = new Error("El token ha expirado")
+  return res.status(400).json({ msg: error.message })
+}
+```
+
+Si el token no ha expirado entonces se procede a cambiar la contraseña, se recibe la contraseña por medio de `req.body` de la siguiente manera: 
+
+```json
+{
+  "password" : "contrasenaEjemplo"
+}
+```
+Posterior a recibir la contraseña, se hashea y se guarda en la base de datos: 
+
+```js
+const { password } = req.body
+
+const salt = await bcrypt.genSalt(10)
+const hashedPassword = await bcrypt.hash(password, salt)
+
+usuario.password = hashedPassword
+usuario.token = ""
+
+await usuario.save()
+```
+
+Despues de esto se retorna un mensaje de exito: 
+
+```js
+return res.json({
+  msg: {
+    titulo: "Contraseña cambiada!",
+    cuerpo: "Ahora puedes iniciar sesion con tu nueva contraseña"
+  }
+})
+```

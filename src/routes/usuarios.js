@@ -10,4 +10,6 @@ router.post("/", usuariosController.crearUsuario)
 router.post("/registrar-datos", checkAuth ,usuariosController.completarPerfil)
 router.post("/login", usuariosController.iniciarSesion)
 router.get("/confirmar/:token", usuariosController.confirmarUsuario)
+router.post("/recovery", usuariosController.solicitarCambioPassword)
+router.post("/recovery/:token", usuariosController.cambiarPassword)
 export default router

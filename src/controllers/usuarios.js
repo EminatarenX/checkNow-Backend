@@ -1,7 +1,7 @@
 import Usuario from "../models/Usuario.js"
 import bcrypt from 'bcrypt'
 import { generarID } from "../helpers/generarId.js"
-import { emailRegistro } from "../helpers/confirmarCuenta.js"
+import { emailRegistro, emailCambiarPassword } from "../helpers/confirmarCuenta.js"
 import { response } from "express"
 import jwt from 'jsonwebtoken'
 
@@ -175,6 +175,67 @@ const completarPerfil = async (req, res) => {
     }
 }
 
+const solicitarCambioPassword = async (req, res) => {
+    
+    const { correo } = req.body;
+
+    try{
+        const usuario = await Usuario.findOne({correo})
+        if(!usuario){
+            return res.status(404).json({msg: "El usuario no existe"})
+        }
+
+        const token = generarID()
+
+        usuario.token = token
+
+        await usuario.save()
+
+        emailCambiarPassword({correo, token})
+
+        return res.json({
+            msg: {
+                titulo: "¡Correo enviado!",
+                cuerpo: "Hemos enviado un correo para que puedas cambiar tu contraseña"
+            }
+        })
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
+const cambiarPassword = async (req, res) => {
+    const { token } = req.params
+    const { password } = req.body
+
+    try{
+        const usuario = await Usuario.findOne({token})
+
+        if(!usuario){
+            return res.status(404).json({msg: "El usuario no ha solicitado el cambio de contraseña"})
+        }
+
+        const salt = await bcrypt.genSalt(10)
+
+        const hashedPassword = await bcrypt.hash(password, salt)
+
+        usuario.password = hashedPassword
+        usuario.token = ""
+
+        await usuario.save()
+
+        return res.json({
+            msg: {
+                titulo: "¡Contraseña cambiada!",
+                cuerpo: "Tu contraseña ha sido cambiada correctamente"
+            }
+        })
+
+    }catch(error){
+        console.log(error)
+    }
+}
 
 
 export default {
@@ -182,5 +243,7 @@ export default {
     crearUsuario,
     iniciarSesion,
     confirmarUsuario,
-    completarPerfil
+    completarPerfil,
+    solicitarCambioPassword,
+    cambiarPassword
 }
