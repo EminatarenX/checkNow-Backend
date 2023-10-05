@@ -7,6 +7,7 @@ config()
 
 ConectarDB()
 
+
 const app = express()
 const puerto = process.env.PORT || 4000
 
@@ -23,4 +24,3 @@ app.use('/api/usuarios', usuariosRouter)
 app.listen(puerto, () => {
     console.log('Servidor corriendo en puerto', puerto)
 })
-

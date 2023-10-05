@@ -111,7 +111,7 @@ const confirmarUsuario = async (req, res) => {
     const { token } = req.params
 
     try {
-        let usuario = await Usuario.findOne({ token })
+        let usuario = await Usuario.findOne({token: token})
 
         if (!usuario) {
             const error = new Error("El usuario ya ha sido confirmado")
