@@ -6,9 +6,44 @@ Backend de Check Now, una aplicación planeada para innovar en el sector laboral
 
 Dentro del backend, tenemos el modelo de usuarios, en el cual se necesitan agregar inicialmente el correo y la contraseña del usuario. Este es el primer paso para registrarse como usuario.
 
+### obtenerUsuarios
+
+Esta función se encargará de las consltas generales o específicas de usuarios, si hay contenido en `req.params` se tomará como consulta específica: 
+
+```json
+{
+  "usuarioId" : "0001" 
+}
+```
+
+Si es una consulta específica entonces vamos a enseñar la información del usuario de la siguiente manera:
+
+```js
+    if (usuarioId) {
+        try {
+            const usuario = await Usuario.findById(usuarioId)
+            return res.json(usuario)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+```
+De lo contrario se mostrará a todos lo usuarios de la base de datos:
+
+```js
+try {
+        const usuarios = await Usuario.find()
+
+        res.json(usuarios)
+
+    } catch (error) {
+        console.log(error)
+    }
+```
+
 ### crearUsuario
 
-Dentro de `controllers/usuario.js`, puedes encontrar la función **`crearUsuario()`**. Primeramente, `req.body` solo recibe un correo y una contraseña de la siguiente manera:
+ Primeramente, `req.body` solo recibe un correo y una contraseña de la siguiente manera:
 ```json
 {
   "correo" : "correo@usuario.com",
@@ -16,6 +51,7 @@ Dentro de `controllers/usuario.js`, puedes encontrar la función **`crearUsuario
 }
 ```
 Recibimos dentro de la funcion como: 
+
 ```js
 const { correo, password } = req.body; 
 ```
@@ -49,7 +85,9 @@ const usuario = new Usuario({
 })
 await usuario.save()
 ```
+
 si todo sale bien, retornamos un mensaje de exito, con los datos del usuario y con un mensaje de aviso para notificar al usuario del mensaje que ha sido enviado a su correo para confirmar su cuenta: 
+
 ```js
 return res.json({
   msg: {
@@ -93,16 +131,23 @@ seguido de extraer el token de los params enviados desde el frontend, hacemos un
     }
   })
 ```
+### completarPerfil
+
+Es importante recopilar la información relevante del usuario como algunos datos personales; tales como: nombre(s), apellidos, teléfono y dirección, también es necesario qué rol cumple esta persona, si es un empleado o si es el encargado de la empresa o área.
+
+
 
 ### iniciarSesion 
 
 Iniciar sesion unicamente espera un json por medio de `req.body` de la siguiente manera:
+
 ```json
 {
   "correo" : "usuario@correo.com",
   "password" : "contrasenia_del_usuario"
 }
 ```
+
 Seguido de recibir estos datos, dentro de un bloque de `trycatch` hacemos una busqueda de ese usuario, por medio del correo: 
 
 ```js
@@ -114,15 +159,19 @@ if (!existeUsuario) {
   return res.status(400).json({ msg: error.message })
 }
 ```
+
 Seguido de verificar que existe, se verifica si el usuario tiene el token de confirmacion, si lo tiene significa que el usuario no esta confirmado:
+
 ```js
 if (existeUsuario.token) {
   const error = new Error("El usuario no esta verificado")
   return res.status(400).json({ msg: error.message })
 }
 ```
+
 si todo es correcto verificamos si la contraseña que estamos recibiendo coincide con la contraseña hasheada dentro del backend usando `compare()` de la libreria *bcrypt*,
 si las contraseñas coinciden se genera un JsonWebToken ( JWT ) donde firmamos con la palabra secretta `JWT_SECRET`, tiempo de expiracion y el id del usuario para facilitar las consultas con middlewares: 
+
 ```js
 
 const passwordCorrecto = await bcrypt.compare(password, existeUsuario.password)
@@ -143,8 +192,8 @@ return res.json({
   },
   token
 })
-
 ```
+
 ### solicitarCambioPassword
 Esta funcion es la encargada de enviar un correo al usuario para que pueda cambiar su contraseña, esta funcion recibe un correo por medio de `req.body` de la siguiente manera: 
 
@@ -173,6 +222,7 @@ usuario.token = token
 
 await usuario.save();
 ```
+
 Despues de esto se envia un correo al usuario con el token generado, para que pueda cambiar su contraseña, y se retorna un mensaje de exito: 
 
 ```js
@@ -202,6 +252,7 @@ if(!usuario) {
   return res.status(400).json({ msg: error.message })
 }
 ```
+
 Si el usuario existe, se verifica que el token no haya expirado, si ya expiró se retorna un mensaje de error: 
 
 ```js
