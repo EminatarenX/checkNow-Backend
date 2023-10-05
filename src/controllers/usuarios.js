@@ -1,7 +1,7 @@
 import Usuario from "../models/Usuario.js"
 import bcrypt from 'bcrypt'
 import { generarID } from "../helpers/generarId.js"
-import { emailRegistro, emailCambiarPassword } from "../helpers/confirmarCuenta.js"
+import { emailRegistro, emailCambiarPassword } from "../helpers/correos.js"
 import { response } from "express"
 import jwt from 'jsonwebtoken'
 
@@ -119,6 +119,7 @@ const confirmarUsuario = async (req, res) => {
         }
 
         usuario.token = ""
+        usuario.verified = true
 
         await usuario.save()
 
@@ -245,20 +246,28 @@ const obtenerPerfil = async (req, res) => {
 
 const eliminarTrabajador = async(req, res) =>{
 
-    const { id: usuario_id } = req.usuario
+    const { usuario } = req;
+    const { id } = req.params;
+    console.log(usuario)
 
     try{
-        const usuario = await Usuario.findById(usuario_id)
-        if(!usuario){
-            const error = new Error("Ese usuario no pertenece a esta empresa")
+        const trabajador = await Usuario.findById(id)
+        if(!trabajador){
+            const error = new Error("Ese trabajador no existe")
+            return res.status(400).json({ msg: error.message })
+        }
+        if(trabajador.idJefe !== usuario.id){
+            const error = new Error("No tienes permisos para eliminar a este trabajador")
             return res.status(400).json({ msg: error.message })
         }
 
+        await Usuario.findByIdAndDelete(id)
 
     }catch(error){
         console.log(error)
     }
 }
+
 
 
 export default {

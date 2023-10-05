@@ -41,6 +41,10 @@ const UsuarioSchema = mongoose.Schema({
         type: String,
         enum: ["admin", "user", null],
     },
+    verified:{
+        type: Boolean,
+        default: false
+    },
     idEmpresa:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa"
