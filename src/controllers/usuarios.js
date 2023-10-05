@@ -64,6 +64,7 @@ const crearUsuario = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error)
         return res.status(400).json({ msg: "Hubo un error, Intenta mas tarde", error })
     }
 }
@@ -237,6 +238,28 @@ const cambiarPassword = async (req, res) => {
     }
 }
 
+const obtenerPerfil = async (req, res) => {
+    const usuario = req.usuario;
+    return res.status(200).json({usuario})
+}
+
+const eliminarTrabajador = async(req, res) =>{
+
+    const { id: usuario_id } = req.usuario
+
+    try{
+        const usuario = await Usuario.findById(usuario_id)
+        if(!usuario){
+            const error = new Error("Ese usuario no pertenece a esta empresa")
+            return res.status(400).json({ msg: error.message })
+        }
+
+
+    }catch(error){
+        console.log(error)
+    }
+}
+
 
 export default {
     obtenerUsuarios,
@@ -245,5 +268,6 @@ export default {
     confirmarUsuario,
     completarPerfil,
     solicitarCambioPassword,
-    cambiarPassword
+    cambiarPassword,
+    eliminarTrabajador
 }

@@ -12,4 +12,5 @@ router.post("/login", usuariosController.iniciarSesion)
 router.get("/confirmar/:token", usuariosController.confirmarUsuario)
 router.post("/recovery", usuariosController.solicitarCambioPassword)
 router.post("/recovery/:token", usuariosController.cambiarPassword)
+router.delete("/eliminarTrabajador", usuariosController.eliminarTrabajador)
 export default router
