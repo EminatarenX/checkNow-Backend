@@ -64,6 +64,7 @@ const crearUsuario = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error)
         return res.status(400).json({ msg: "Hubo un error, Intenta mas tarde", error })
     }
 }
@@ -110,7 +111,7 @@ const confirmarUsuario = async (req, res) => {
     const { token } = req.params
 
     try {
-        let usuario = await Usuario.findOne({ token })
+        let usuario = await Usuario.findOne({token: token})
 
         if (!usuario) {
             const error = new Error("El usuario ya ha sido confirmado")

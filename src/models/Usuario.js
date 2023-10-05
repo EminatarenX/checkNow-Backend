@@ -18,6 +18,7 @@ const UsuarioSchema = mongoose.Schema({
         length: 10,
         trim: true,
         unique: true,
+        sparse: true
     },
     direccion: {
         type : String, 
