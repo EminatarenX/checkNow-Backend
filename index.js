@@ -15,7 +15,7 @@ app.use(express.json())
 
 const origin = process.env.FRONTEND_URL
 app.use(cors({
-    origin,
+    origin: [origin, 'http://localhost:5173'],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }))
 
