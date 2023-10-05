@@ -106,8 +106,8 @@ const emailRegistro = async(datos) => {
             <main class="main">
                 <div class="card">
                     <h1>Check Now</h1>
-                    <p>Hola!, bienvenido a Check Now</p>
-                    <p>Confirma tu cuenta haciendo click en el siguiente enlace</p>
+                    <p>¡Hola!, bienvenido a Check Now</p>
+                    <p>Confirma tu cuenta haciendo click en el siguiente enlace:</p>
                     <a href="${process.env.FRONTEND_URL}/confirmar/${token}" class="btn">Comprobar cuenta</a>
         
                     <p class="text-muted">Si no creaste esta cuenta, ignora este mensaje.</p>
@@ -226,11 +226,11 @@ const emailCambiarPassword = async(datos) => {
                 <main class="main">
                     <div class="card">
                         <h1>Check Now</h1>
-                        <p>Hola!, bienvenido a Check Now</p>
-                        <p>Confirma tu cuenta haciendo click en el siguiente enlace</p>
-                        <a href="${process.env.FRONTEND_URL}/confirmar/${token}" class="btn">Comprobar cuenta</a>
+                        <p>Restablecer contraseña Check Now</p>
+                        <p>Haz clic en el siguiente enlace para cambiar la contraseña:</p>
+                        <a href="${process.env.FRONTEND_URL}/recovery/${token}" class="btn">Cambiar contraseña</a>
             
-                        <p class="text-muted">Si no creaste esta cuenta, ignora este mensaje.</p>
+                        <p class="text-muted">Si no has solicitado esto entonces ignora este mensaje.</p>
                     </div>
                 </main>
             </body>
