@@ -278,5 +278,6 @@ export default {
     completarPerfil,
     solicitarCambioPassword,
     cambiarPassword,
+    obtenerPerfil,
     eliminarTrabajador
 }
