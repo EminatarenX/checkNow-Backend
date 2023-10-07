@@ -30,6 +30,12 @@ const PlazaSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    estado : {
+        type: String,
+        required: true,
+        default: "disponible",
+        enum: ["disponible", "ocupado"]
+    },
     empleado: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empleado"
