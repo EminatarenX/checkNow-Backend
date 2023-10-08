@@ -82,8 +82,15 @@ const iniciarSesion = async (req, res) => {
             return res.status(400).json({ msg: error.message })
         }
 
-        if (existeUsuario.token) {
+
+
+        if (existeUsuario.token && !existeUsuario.verified) {
             const error = new Error("El usuario no esta verificado")
+            return res.status(400).json({ msg: error.message })
+        }
+
+        if(existeUsuario.token && existeUsuario.verified){
+            const error = new Error("Contraseña incorrecta")
             return res.status(400).json({ msg: error.message })
         }
 
