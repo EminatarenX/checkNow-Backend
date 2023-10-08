@@ -6,6 +6,27 @@ const EmpleadoSchema = mongoose.Schema({
         ref: "Usuario",
         required: true
     },
+    informacion_personal: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {
+            // nombre: "",
+            // apellido_paterno: "",
+            // apellido_materno: "",
+            // fecha_nacimiento: "",
+            // genero: "",
+            // estado_civil: "",
+            // telefono: "",
+            // correo: "",
+            // direccion: "",
+            // numero_seguro_social: "",
+            // curp: "",
+            // rfc: "",
+            // nss: "",
+            // foto: "",
+            // huella: "",
+            // firma: "",
+        },
+    },
     id_empresa: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa",
