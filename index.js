@@ -1,6 +1,7 @@
 import { config } from 'dotenv'
 import express from 'express'
 import usuariosRouter from './src/routes/usuarios.js'
+import empresasRouter from './src/routes/empresas.js'
 import { ConectarDB } from './src/db/connection.js'
 import cors from 'cors'
 config()
@@ -20,6 +21,7 @@ app.use(cors({
 }))
 
 app.use('/api/usuarios', usuariosRouter)
+app.use('/api/empresas', empresasRouter)
 
 app.listen(puerto, () => {
     console.log('Servidor corriendo en puerto', puerto)
