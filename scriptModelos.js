@@ -1,7 +1,12 @@
-const fs = require('fs') 
-const path = require('path') 
+import fs from 'fs'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { dirname } from 'path'
 
-const ruta = "registros" //nombre de la ruta
+const __filename = fileURLToPath(import.meta.url)
+const __dirname = dirname(__filename)
+
+const ruta = "plazas" //nombre de la ruta
 
 const contenidoRuta = `
 import {Router} from "express"
