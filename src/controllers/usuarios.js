@@ -1,9 +1,11 @@
-import Usuario from "../models/Usuario.js"
 import bcrypt from 'bcrypt'
 import { generarID } from "../helpers/generarId.js"
 import { emailRegistro, emailCambiarPassword } from "../helpers/correos.js"
-import { response } from "express"
 import jwt from 'jsonwebtoken'
+
+// modelos
+import Usuario from "../models/Usuario.js"
+import Empleado from '../models/Empleado.js'
 
 const obtenerUsuarios = async (req, res) => {
     //crear una variable por si pone un usuario especifico
@@ -155,11 +157,26 @@ const completarPerfil = async (req, res) => {
             return res.status(400).json({ msg: error.message })
         }
 
+        if(role === "user"){
+            const empleado = new Empleado({
+                id_usuario: usuario_id,
+                informacion_personal: {
+                    nombre,
+                    apellidos,
+                    telefono,
+                    direccion
+                }
+            })
+            await empleado.save()
+        }
+
         usuario.nombre = nombre
         usuario.apellidos = apellidos
         usuario.telefono = telefono
         usuario.direccion = direccion
         usuario.role = role
+
+        
 
         await usuario.save()
 
