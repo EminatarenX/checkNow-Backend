@@ -91,7 +91,7 @@ const iniciarSesion = async (req, res) => {
 
         
         const passwordCorrecto = await bcrypt.compare(password, existeUsuario.password)
-        
+
         if(existeUsuario.token && existeUsuario.verified && !passwordCorrecto){
             const error = new Error("Contraseña incorrecta")
             return res.status(400).json({ msg: error.message })
@@ -198,6 +198,7 @@ const completarPerfil = async (req, res) => {
         })
 
     } catch (error) {
+        console.log(error)
         return res.status(400).json({ msg: "Hubo un error, Intenta mas tarde", error })
     }
 }

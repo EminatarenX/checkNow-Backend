@@ -33,8 +33,7 @@ const EmpleadoSchema = mongoose.Schema({
     },
     id_plaza: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Plaza",
-        required: true
+        ref: "Plaza"
     },
     entradas: [
         {
