@@ -89,12 +89,13 @@ const iniciarSesion = async (req, res) => {
             return res.status(400).json({ msg: error.message })
         }
 
-        if(existeUsuario.token && existeUsuario.verified){
+        
+        const passwordCorrecto = await bcrypt.compare(password, existeUsuario.password)
+        
+        if(existeUsuario.token && existeUsuario.verified && !passwordCorrecto){
             const error = new Error("Contraseña incorrecta")
             return res.status(400).json({ msg: error.message })
         }
-
-        const passwordCorrecto = await bcrypt.compare(password, existeUsuario.password)
 
         if (!passwordCorrecto) {
             const error = new Error("Contraseña incorrecta")
