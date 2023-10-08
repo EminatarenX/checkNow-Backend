@@ -9,24 +9,22 @@ const empresaSchema = new mongoose.Schema({
   },
   nombre: {
     type: String,
-    required: true,
   },
   razonSocial: {
     type: String,
-    required: true,
   },
   identificacionTributaria: {
     type: String,
     unique: true,
-    required: true,
+    sparse: true
   },
   direccion: {
     type: String,
-    required: true,
   },
   telefono: {
     type: String,
-    required: true,
+    unique: true,
+    sparse: true
   },
   // Industria: Sector en el que laboran
   //  puede ser:
@@ -49,4 +47,4 @@ const empresaSchema = new mongoose.Schema({
 
 const Empresa = mongoose.model('Empresa', empresaSchema);
 
-module.exports = Empresa;
+export default Empresa;

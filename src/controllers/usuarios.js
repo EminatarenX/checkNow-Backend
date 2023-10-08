@@ -6,6 +6,7 @@ import jwt from 'jsonwebtoken'
 // modelos
 import Usuario from "../models/Usuario.js"
 import Empleado from '../models/Empleado.js'
+import Empresa from '../models/Empresa.js'
 
 const obtenerUsuarios = async (req, res) => {
     //crear una variable por si pone un usuario especifico
@@ -174,8 +175,16 @@ const completarPerfil = async (req, res) => {
                     telefono,
                     direccion
                 }
-            })
+            });
+
             await empleado.save()
+
+        } else {
+            const empresa = new Empresa({
+                id_creador: usuario_id,
+            });
+
+            await empresa.save()
         }
 
         usuario.nombre = nombre
