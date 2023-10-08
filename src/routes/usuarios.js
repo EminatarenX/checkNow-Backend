@@ -6,6 +6,7 @@ import { checkAuth } from '../helpers/checkAuth.js'
 const router = Router()
 
 router.get('/', usuariosController.obtenerUsuarios)
+router.get("/:usuarioId", usuariosController.obtenerUsuarios)
 router.post("/", usuariosController.crearUsuario)
 router.post("/registrar-datos", checkAuth ,usuariosController.completarPerfil)
 router.post("/login", usuariosController.iniciarSesion)

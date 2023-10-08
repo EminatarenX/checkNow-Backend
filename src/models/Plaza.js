@@ -26,8 +26,12 @@ const PlazaSchema = mongoose.Schema({
         type: Array,
         required: true
     },
-    horario: {
-        type: String,
+    horario_entrada: {
+        type: Date,
+        required: true
+    },
+    horario_salida: {
+        type: Date,
         required: true
     },
     estado : {

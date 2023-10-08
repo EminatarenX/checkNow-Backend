@@ -9,6 +9,7 @@ const empresaSchema = new mongoose.Schema({
   },
   nombre: {
     type: String,
+    //required: true
   },
   razonSocial: {
     type: String,
@@ -20,6 +21,7 @@ const empresaSchema = new mongoose.Schema({
   },
   direccion: {
     type: String,
+    //required: true
   },
   telefono: {
     type: String,
