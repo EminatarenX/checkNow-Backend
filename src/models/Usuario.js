@@ -39,7 +39,7 @@ const UsuarioSchema = mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["admin", "user", null],
+        enum: ["admin", "user", "new"],
     },
     verified:{
         type: Boolean,

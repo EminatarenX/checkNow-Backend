@@ -31,7 +31,8 @@ const crearUsuario = async (req, res) => {
         const usuario = new Usuario({
             correo,
             password: hashedPassword,
-            token
+            token,
+            role: "new"
         })
 
 
@@ -83,7 +84,7 @@ const iniciarSesion = async (req, res) => {
             return res.status(400).json({ msg: error.message })
         }
 
-        const token = jwt.sign({ id: existeUsuario._id }, process.env.JWT_SECRET, { expiresIn: "30m" })
+        const token = jwt.sign({ id: existeUsuario._id }, process.env.JWT_SECRET, { expiresIn: "1h" })
 
         return res.json({
             msg: {
