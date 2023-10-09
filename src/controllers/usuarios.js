@@ -150,12 +150,6 @@ const completarPerfil = async (req, res) => {
         if(role === "user"){
             const empleado = new Empleado({
                 id_usuario: usuario_id,
-                informacion_personal: {
-                    nombre,
-                    apellidos,
-                    telefono,
-                    direccion
-                }
             });
 
             await empleado.save()
@@ -164,16 +158,18 @@ const completarPerfil = async (req, res) => {
             const empresa = new Empresa({
                 id_creador: usuario_id,
             });
-
-            usuario.nombre = nombre
-            usuario.apellidos = apellidos
-            usuario.telefono = telefono
-            usuario.direccion = direccion
-            usuario.role = role
             
             await empresa.save()
-            await usuario.save()
+  
         }
+        
+        usuario.nombre = nombre
+        usuario.apellidos = apellidos
+        usuario.telefono = telefono
+        usuario.direccion = direccion
+        usuario.role = role
+
+        await usuario.save()
 
 
         return res.json({
