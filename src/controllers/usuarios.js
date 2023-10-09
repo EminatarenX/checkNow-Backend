@@ -164,18 +164,16 @@ const completarPerfil = async (req, res) => {
                 id_creador: usuario_id,
             });
 
+            usuario.nombre = nombre
+            usuario.apellidos = apellidos
+            usuario.telefono = telefono
+            usuario.direccion = direccion
+            usuario.role = role
+            
             await empresa.save()
+            await usuario.save()
         }
 
-        usuario.nombre = nombre
-        usuario.apellidos = apellidos
-        usuario.telefono = telefono
-        usuario.direccion = direccion
-        usuario.role = role
-
-        
-
-        await usuario.save()
 
         return res.json({
             msg: {
