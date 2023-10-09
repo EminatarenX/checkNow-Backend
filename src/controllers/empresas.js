@@ -1,35 +1,5 @@
 import Empresa from '../models/Empresa.js'
 
-const crearEmpresa = async (req, res) => {
-    const { nombre, razonSocial, identificacionTributaria, direccion, telefono, industria } = req.body
-    const { usuario } = req;
-
-    try {
-        const empresaExiste = await Empresa.findOne({ id_creador: usuario.id })
-
-        if (empresaExiste) {
-            return res.status(400).json({ msg: "La empresa ya esta registrada" })
-        }
-
-        const empresa = new Empresa({
-            id_creador: usuario.id,
-            nombre,
-            direccion,
-            telefono,
-            razonSocial,
-            identificacionTributaria,
-            industria
-        })
-
-        await empresa.save()
-
-        return res.json({ msg: "Empresa creada correctamente", empresa })
-
-    } catch (error) {
-        console.log(error)
-        return res.status(500).json({ msg: "Error al crear la empresa" })
-    }
-}
 const obtenerEmpresa = async (req, res) => {
 
     const { usuario } = req
@@ -102,7 +72,6 @@ const eliminarEmpresa = async (req, res) => {
 }
 
 export default {
-    crearEmpresa,
     obtenerEmpresa,
     actualizarDatosEmpresa,
     eliminarEmpresa

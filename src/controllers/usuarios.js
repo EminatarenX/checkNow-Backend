@@ -8,26 +8,6 @@ import Usuario from "../models/Usuario.js"
 import Empleado from '../models/Empleado.js'
 import Empresa from '../models/Empresa.js'
 
-const obtenerUsuarios = async (req, res) => {
-    //crear una variable por si pone un usuario especifico
-    const { usuarioId } = req.params
-    if (usuarioId) {
-        try {
-            const usuario = await Usuario.findById(usuarioId)
-            return res.json(usuario)
-        } catch (error) {
-            console.log(error)
-        }
-    }
-    try {
-        const usuarios = await Usuario.find()
-
-        res.json(usuarios)
-
-    } catch (error) {
-        console.log(error)
-    }
-}
 
 const crearUsuario = async (req, res) => {
     const { correo, password } = req.body
@@ -275,38 +255,15 @@ const cambiarPassword = async (req, res) => {
 }
 
 const obtenerPerfil = async (req, res) => {
+
     const usuario = req.usuario;
     return res.status(200).json({usuario})
+
 }
-
-const eliminarTrabajador = async(req, res) =>{
-
-    const { usuario } = req;
-    const { id } = req.params;
-    console.log(usuario)
-
-    try{
-        const trabajador = await Usuario.findById(id)
-        if(!trabajador){
-            const error = new Error("Ese trabajador no existe")
-            return res.status(400).json({ msg: error.message })
-        }
-        if(trabajador.idJefe !== usuario.id){
-            const error = new Error("No tienes permisos para eliminar a este trabajador")
-            return res.status(400).json({ msg: error.message })
-        }
-
-        await Usuario.findByIdAndDelete(id)
-
-    }catch(error){
-        console.log(error)
-    }
-}
-
 
 
 export default {
-    obtenerUsuarios,
+    // obtenerUsuarios,
     crearUsuario,
     iniciarSesion,
     confirmarUsuario,
@@ -314,5 +271,4 @@ export default {
     solicitarCambioPassword,
     cambiarPassword,
     obtenerPerfil,
-    eliminarTrabajador
 }
