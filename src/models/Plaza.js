@@ -3,12 +3,14 @@ import mongoose from "mongoose";
 const PlazaSchema = mongoose.Schema({
     nombre: {
         type: String, 
+        unique: true,
         required: true,
 
     },
-    departamento: {
-        type: String,
-        required: true,
+    categoria: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Categoria",
+        required: true
     },
     descripcion: {
         type: String,
@@ -16,15 +18,14 @@ const PlazaSchema = mongoose.Schema({
     },
     supervisor: {
         type: String,
-        required: true,
     },
     salario: {
         type: Number,
         required: true
     },
     habilidades: {
-        type: Array,
-        required: true
+        type: mongoose.Schema.Types.Mixed,
+        default: {}
     },
     horario_entrada: {
         type: Date,
@@ -34,17 +35,12 @@ const PlazaSchema = mongoose.Schema({
         type: Date,
         required: true
     },
-    estado : {
-        type: String,
-        required: true,
-        default: "disponible",
-        enum: ["disponible", "ocupado"]
-    },
     empleado: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empleado"
     },
-    idEmpresa:{
+    
+    empresa:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa"
     },

@@ -22,11 +22,12 @@ const obtenerEmpresa = async (req, res) => {
 }
 
 const actualizarDatosEmpresa = async (req, res) => {
-    const { usuario } = req
+    const { id } = req.empresa
+
     const { nombre, direccion, telefono, razonSocial, identificacionTributaria, industria } = req.body
 
     try {
-        const empresa = await Empresa.findOne({ id_creador: usuario.id })
+        const empresa = await Empresa.findById(id)
 
 
         if (!empresa) {
@@ -54,10 +55,10 @@ const actualizarDatosEmpresa = async (req, res) => {
 
 const eliminarEmpresa = async (req, res) => {
 
-    const { usuario } = req
+    const { id } = req.empresa
 
     try {
-        const empresa = await Empresa.findOne({ id_creador: usuario.id })
+        const empresa = await Empresa.findById( id )
 
         if (!empresa) {
             return res.status(404).json({ msg: "Empresa no encontrada, intente mas tarde" })

@@ -1,3 +1,6 @@
+import Empresa from "../models/Empresa.js";
+import Plaza from "../models/Plaza.js";
+
 const obtenerplazas = async (req, res) => {
   const { usuario } = req;
 

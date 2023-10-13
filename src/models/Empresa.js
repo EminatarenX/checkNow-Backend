@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 // Define el esquema de la empresa
 const empresaSchema = new mongoose.Schema({
-  id_creador: {
+  creador: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Usuario',
     required: true
@@ -37,12 +37,19 @@ const empresaSchema = new mongoose.Schema({
   // - Tecnología etc
   industria: String,
 
-  plazas: [
+  departamentos: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Plaza'
+      ref: 'Departamento'
     }
   ]
+
+  // plazas: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'Plaza'
+  //   }
+  // ]
 
 });
 

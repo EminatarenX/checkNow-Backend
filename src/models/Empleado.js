@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const EmpleadoSchema = mongoose.Schema({
-    id_usuario: {
+    usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Usuario",
         required: true
@@ -21,11 +21,11 @@ const EmpleadoSchema = mongoose.Schema({
             // firma: "",
         },
     },
-    id_empresa: {
+    empresa: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa",
     },
-    id_plaza: {
+    plaza: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Plaza"
     },
