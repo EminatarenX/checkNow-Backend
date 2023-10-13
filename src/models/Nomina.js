@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const NominaSchema = new mongoose.Schema({
-  id_empleado: {
+  empleado: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Empleado',
     required: true,
@@ -22,7 +22,7 @@ const NominaSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.Mixed,
     default: {},
   },
-  id_empresa: {
+  empresa: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Empresa',
     required: true,

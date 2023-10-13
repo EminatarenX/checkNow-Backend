@@ -1,3 +1,5 @@
+import Empleado from '../models/Empleado.js'
+
 const obtenerEmpleados = async(req, res) => {
 
     const { usuario } = req
@@ -19,4 +21,4 @@ const obtenerEmpleados = async(req, res) => {
     }
 }
 
-export { obtenerempleados }
+export default { obtenerEmpleados }

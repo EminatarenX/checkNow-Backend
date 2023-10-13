@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const SalidaSchema = mongoose.Schema({
+const CheckSchema = mongoose.Schema({
     empresa: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa",
@@ -11,14 +11,20 @@ const SalidaSchema = mongoose.Schema({
         ref: "Empleado",
         required: true
     },
-    fecha_salida: {
+    fecha_entrada: {
         type: Date,
         default: Date.now(),
         required: true
     },
+    fecha_salida: {
+        type: Date
+    },
+    comentarios: {
+        type: String,
+        enum: ["puntual, no asistió, tarde, permiso"],
+    }
+})
 
-});
+const Check = mongoose.model("Check", CheckSchema, 'check')
 
-const Salida = mongoose.model("Salida", SalidaSchema, "salida");
-
-export default Salida;
+export default Check

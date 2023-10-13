@@ -6,7 +6,8 @@ import { dirname } from 'path'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-const ruta = "plazas" //nombre de la ruta
+const ruta = "categoria" //nombre de la ruta
+const rutaMayuscula = ruta.charAt(0).toUpperCase() + ruta.slice(1).toLowerCase()
 
 const contenidoRuta = `
 import {Router} from "express"
@@ -20,10 +21,11 @@ export default router
 `
 
 const contenidoController = `
-const obtener${ruta} = async(req, res) => {
+const obtener${rutaMayuscula} = async(req, res) => {
 
     return res.json({msg: "Obteniendo ${ruta}"})
 }
+export default { obtener${rutaMayuscula} }
 `
 const src = path.join(__dirname, "src")
 const controllers = path.join(src, "controllers")

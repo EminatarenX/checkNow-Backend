@@ -21,11 +21,11 @@ const EmpleadoSchema = mongoose.Schema({
             // firma: "",
         },
     },
-    id_empresa: {
+    empresa: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa",
     },
-    id_plaza: {
+    plaza: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Plaza"
     },
