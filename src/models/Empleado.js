@@ -9,16 +9,13 @@ const EmpleadoSchema = mongoose.Schema({
     informacion_personal: {
         type: mongoose.Schema.Types.Mixed,
         default: {
-            // fecha_nacimiento: "",
-            // genero: "",
-            // estado_civil: "",
-            // numero_seguro_social: "",
-            // curp: "",
-            // rfc: "",
-            // nss: "",
-            // foto: "",
-            // huella: "",
-            // firma: "",
+            fecha_nacimiento: "",
+            genero: "",
+            estado_civil: "",
+            numero_seguro_social: "",
+            curp: "",
+            rfc: "",
+            foto: "",            
         },
     },
     empresa: {
