@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const EmpleadoSchema = mongoose.Schema({
-    id_usuario: {
+    usuario: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Usuario",
         required: true

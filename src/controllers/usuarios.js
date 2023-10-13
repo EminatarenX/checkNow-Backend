@@ -149,14 +149,14 @@ const completarPerfil = async (req, res) => {
 
         if(role === "user"){
             const empleado = new Empleado({
-                id_usuario: usuario_id,
+                usuario: usuario_id,
             });
 
             await empleado.save()
 
         } else {
             const empresa = new Empresa({
-                id_creador: usuario_id,
+                creador: usuario_id,
             });
             
             await empresa.save()
