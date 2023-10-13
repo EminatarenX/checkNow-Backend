@@ -37,12 +37,19 @@ const empresaSchema = new mongoose.Schema({
   // - Tecnología etc
   industria: String,
 
-  plazas: [
+  departamentos: [
     {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'Plaza'
+      ref: 'Departamento'
     }
   ]
+
+  // plazas: [
+  //   {
+  //     type: mongoose.Schema.Types.ObjectId,
+  //     ref: 'Plaza'
+  //   }
+  // ]
 
 });
 
