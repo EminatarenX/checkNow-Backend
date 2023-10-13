@@ -256,6 +256,38 @@ const obtenerPerfil = async (req, res) => {
 
 }
 
+const actualizarUsuario = async (req, res) => {
+
+    const { nombre, apellidos, telefono, direccion } = req.body
+    const { id: usuario_id } = req.usuario
+
+    try {
+        let usuario = await Usuario.findById(usuario_id)
+
+        if (!usuario) {
+            const error = new Error("El usuario no existe")
+            return res.status(400).json({ msg: error.message })
+        }
+
+        const existeTelefono = await Usuario.findOne({ telefono })
+
+        if(existeTelefono && existeTelefono._id != usuario_id){
+            const error = new Error("El telefono ya esta registrado")
+            return res.status(400).json({ msg: error.message })
+        }
+
+        usuario.nombre = nombre
+        usuario.apellidos = apellidos
+        usuario.telefono = telefono
+        usuario.direccion = direccion
+ 
+        await usuario.save()
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({ msg: "Hubo un error, Intenta mas tarde", error })
+    }
+}
+
 
 export default {
     // obtenerUsuarios,
@@ -266,4 +298,5 @@ export default {
     solicitarCambioPassword,
     cambiarPassword,
     obtenerPerfil,
+    actualizarUsuario
 }
