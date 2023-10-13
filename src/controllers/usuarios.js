@@ -250,10 +250,42 @@ const cambiarPassword = async (req, res) => {
 }
 
 const obtenerPerfil = async (req, res) => {
-
-    const usuario = req.usuario;
-    return res.status(200).json({usuario})
-
+   
+    const {id, correo, verified, created_at, updated_at, nombre, apellidos, direccion, role, telefono} = req.usuario;
+    
+    if(req.empresa){
+        const empresa = req.empresa
+        return res.status(200).json({usuario: {
+            id,
+            correo,
+            verified,
+            created_at,
+            updated_at,
+            nombre,
+            apellidos,
+            direccion,
+            role,
+            telefono,
+            empresa
+        }})
+    
+    }else {
+        return res.status(200).json({usuario: {
+            id,
+            correo,
+            verified,
+            created_at,
+            updated_at,
+            nombre,
+            apellidos,
+            direccion,
+            role,
+            telefono,
+            
+        }})
+    }
+    
+   
 }
 
 

@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import Usuario from "../models/Usuario.js";
+import Empresa from "../models/Empresa.js";
 
 async function checkAuth(req, res, next) {
     let token;
@@ -18,7 +19,21 @@ async function checkAuth(req, res, next) {
 
         req.usuario = usuario
         
+
+        if(usuario.role !== "admin") {
+            return next()
+        }
+    
+        const empresa = await Empresa.findOne({creador: id})
+        
+        if(!empresa) {
+            return next()
+        }
+
+        req.empresa = empresa
+
         return next()
+
 
     }else {
         return res.status(401).json({msg: "No autorizado"})
