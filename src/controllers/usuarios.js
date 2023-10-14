@@ -254,7 +254,7 @@ const obtenerPerfil = async (req, res) => {
     const {id, correo, verified, created_at, updated_at, nombre, apellidos, direccion, role, telefono} = req.usuario;
     
     if(req.empresa){
-        const empresa = req.empresa
+        const {id : empresa} = req.empresa
         return res.status(200).json({usuario: {
             id,
             correo,
