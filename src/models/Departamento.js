@@ -3,7 +3,10 @@ import mongoose from "mongoose";
 const DepartamentoSchema = mongoose.Schema({
     nombre: {
         type: String,
-        unique: true,
+        required: true
+    },
+    icon: {
+        type: String,
         required: true
     },
     categorias: [

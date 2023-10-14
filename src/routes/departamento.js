@@ -1,12 +1,13 @@
 
 import {Router} from "express"
 import departamentoController from "../controllers/departamento.js"
+import { checkAuth } from "../helpers/checkAuth.js"
 
 const router = Router()
 
-router.get("/", departamentoController.obtenerdepartamento)
-router.post("/crear", departamentoController.creardepartamento)
-router.put("/editar/:id", departamentoController.editardepartamento)
-router.delete("/eliminar/:id", departamentoController.eliminardepartamento)
+router.get("/", checkAuth,departamentoController.obtenerDepartamento)
+router.post("/crear", checkAuth, departamentoController.crearDepartamento)
+router.put("/editar/:id",checkAuth, departamentoController.editarDepartamento)
+router.delete("/eliminar/:id",checkAuth, departamentoController.eliminarDepartamento)
 
 export default router

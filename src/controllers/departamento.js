@@ -6,14 +6,15 @@ const obtenerDepartamento = async(req, res) => {
 }
 
 const crearDepartamento = async(req, res) => {
-    const { nombre } = req.body
-    const { id } = req.usuario
-
+    const { nombre, icon } = req.body
+    const { id } = req.empresa
+    
     try {
-        const departamento = await Departamento.create({ nombre, empresa: id })
+        const departamento = await Departamento.create({ nombre, empresa: id, icon })
         return res.status(201).json({ departamento })
 
     }catch(error) {
+        console.log(error)
         return res.status(500).json({ error })
     }
 }
@@ -38,4 +39,4 @@ const eliminarDepartamento = async(req, res) => {
     }
 }
 
-export { obtenerDepartamento, crearDepartamento, editarDepartamento, eliminarDepartamento }
+export default { obtenerDepartamento, crearDepartamento, editarDepartamento, eliminarDepartamento }

@@ -72,4 +72,18 @@ describe('Test de acciones para empresas ( usuarios admin) ', () => {
         expect(response.status).toBe(200);
         expect(response.body).toHaveProperty('empresa')
     })
+
+    it('Should respond with 201, and return a department data', async() => {
+        const response = await request(app)
+            .post('/api/departamentos/crear')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`)
+            .send({
+                nombre: 'Departamento de prueba',
+                icon: 'icono de prueba'
+            })
+
+        expect(response.status).toBe(201)
+        expect(response.body).toHaveProperty('departamento')
+    })
 })
