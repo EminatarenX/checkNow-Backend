@@ -7,9 +7,7 @@ const url = process.env.DB_URL
 const ConectarDB = async () => {
     try {
   
-        await mongoose.connect(url, {
-            maxPollSize: 5
-        })
+        await mongoose.connect(url)
         console.log("Conectado a db")
 
         
