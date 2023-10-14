@@ -48,6 +48,7 @@ describe('Test de inicio de sesion', () => {
 describe('Test de acciones para empresas ( usuarios admin) ', () => {
     let token;
 
+    const numeroRandom = Math.floor(Math.random() * 2000) +1;
     it('should respond with 200, and return a token', async() => {
         const response = await request(app)
             .post('/api/usuarios/login')
@@ -79,11 +80,21 @@ describe('Test de acciones para empresas ( usuarios admin) ', () => {
             .set('Content-Type', 'application/json')
             .set('Authorization', `Bearer ${token}`)
             .send({
-                nombre: 'Departamento de prueba',
+                nombre: 'Departamento de prueba ' + numeroRandom,
                 icon: 'icono de prueba'
             })
 
         expect(response.status).toBe(201)
+        expect(response.body).toHaveProperty('departamento')
+    })
+
+    it('should respond with 200 and return a department data with categories if it has', async() => {
+        const response = await request(app)
+            .get('/api/departamentos/departamento-de-prueba-4')
+            .set('Content-Type', 'application/json')
+            .set('Authorization', `Bearer ${token}`)
+
+        expect(response.status).toBe(200)
         expect(response.body).toHaveProperty('departamento')
     })
 })
