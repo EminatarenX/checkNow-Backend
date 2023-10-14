@@ -1,5 +1,22 @@
 import Departamento from '../models/Departamento.js'
 
+const obtenerDepartamentos = async (req, res) => {
+    const { id } = req.empresa
+
+    try {
+        const departamentos = await Departamento.find({ empresa: id})
+
+        if(departamentos.length === 0) {
+            return res.status(404).json({ msg: "No se encontraron departamentos" })
+        }
+
+        return res.status(200).json({ departamentos})
+    }catch(error){
+        console.log(error)
+        return res.status(500).json({ error })
+    }
+}
+
 const obtenerDepartamento = async(req, res) => {
     const { id } = req.empresa
     const { nombre } = req.params
@@ -68,4 +85,4 @@ const eliminarDepartamento = async(req, res) => {
     }
 }
 
-export default { obtenerDepartamento, crearDepartamento, editarDepartamento, eliminarDepartamento }
+export default { obtenerDepartamento, crearDepartamento, editarDepartamento, eliminarDepartamento , obtenerDepartamentos }

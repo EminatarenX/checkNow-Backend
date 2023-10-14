@@ -5,6 +5,7 @@ import { checkAuth } from "../helpers/checkAuth.js"
 
 const router = Router()
 
+router.get('/', checkAuth, departamentoController.obtenerDepartamentos)
 router.get("/:nombre", checkAuth,departamentoController.obtenerDepartamento)
 router.post("/crear", checkAuth, departamentoController.crearDepartamento)
 router.put("/editar/:id",checkAuth, departamentoController.editarDepartamento)
