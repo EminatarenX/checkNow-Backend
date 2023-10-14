@@ -7,7 +7,9 @@ const obtenerDepartamento = async(req, res) => {
     
     try {
         const departamento = await Departamento.findOne({ empresa: id, nombre})
-
+            .populate("categorias")
+            .exec()
+            
         if(!departamento) {
             return res.status(404).json({ msg: "No se encontró el departamento" })
 
