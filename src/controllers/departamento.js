@@ -2,20 +2,24 @@ import Departamento from '../models/Departamento.js'
 
 const obtenerDepartamento = async(req, res) => {
     const { id } = req.empresa
-    const { nombre} = req.params
+    const { nombre } = req.params
 
     
     try {
         const departamento = await Departamento.findOne({ empresa: id, nombre})
-            .populate("categorias")
-            .exec()
-            
+        
         if(!departamento) {
             return res.status(404).json({ msg: "No se encontró el departamento" })
 
         }
-        
+
+        if (departamento.categorias.length > 0) {
+            const departamentoCategorias = await Departamento.findOne({ empresa: id, nombre}).populate("categorias")
+            return res.status(200).json({ departamento: departamentoCategorias })
+        }
+
         return res.status(200).json({ departamento })
+        
     } catch (error) {
         console.log(error)
         return res.status(500).json({ error })
