@@ -26,3 +26,5 @@ app.use('/api/empresas', empresasRouter)
 app.listen(puerto, () => {
     console.log('Servidor corriendo en puerto', puerto)
 })
+
+export default app
