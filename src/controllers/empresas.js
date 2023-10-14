@@ -2,11 +2,11 @@ import Empresa from '../models/Empresa.js'
 
 const obtenerEmpresa = async (req, res) => {
 
-    const { usuario } = req
+    const { id } = req.empresa
 
     try {
 
-        const empresa = await Empresa.findOne({ id_creador: usuario.id})
+        const empresa = await Empresa.findById(id)
 
         if (!empresa) {
             return res.status(404).json({ msg: "No se pudieron obtener los datos de la empresa, intente mas tarde" })
