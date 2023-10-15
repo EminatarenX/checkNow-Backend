@@ -66,11 +66,12 @@ const crearDepartamento = async(req, res) => {
 }
 const editarDepartamento = async(req, res) => {
     const { id } = req.params
-    const { nombre } = req.body
+    const { nombre, icon } = req.body
     try {
-        const departamento = await Departamento.findByIdAndUpdate(id, { nombre })
+        const departamento = await Departamento.findByIdAndUpdate(id, { nombre, icon }, { new: true})
         return res.status(200).json({ departamento })
     }catch(error) {
+        console.log(error)
         return res.status(500).json({ error })
     }
 }
@@ -78,9 +79,11 @@ const editarDepartamento = async(req, res) => {
 const eliminarDepartamento = async(req, res) => {
     const { id } = req.params
     try {
-        const departamento = await Departamento.findByIdAndDelete(id)
-        return res.status(200).json({ departamento })
+        
+        await Departamento.findByIdAndDelete(id)
+        return res.status(200).json({ msg: "Departamento eliminado correctamente" })
     }catch(error) {
+
         return res.status(500).json({ error })
     }
 }
