@@ -6,10 +6,10 @@ const EmpleadoSchema = mongoose.Schema({
         ref: "Usuario",
         required: true
     },
-    informacion_personal: {
+    informacion_personal: { 
         type: mongoose.Schema.Types.Mixed,
         default: {
-            fecha_nacimiento: "",
+            fecha_nacimiento: "", //pasar estos datos en el req.bodylololó´ljose 
             genero: "",
             estado_civil: "",
             numero_seguro_social: "",

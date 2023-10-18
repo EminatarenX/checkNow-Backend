@@ -35,7 +35,9 @@ const empresaSchema = new mongoose.Schema({
   // - Comercio
   // - Construcción
   // - Tecnología etc
-  industria: String,
+  industria: {
+    type: String
+  },
 
   departamentos: [
     {

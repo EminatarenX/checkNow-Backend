@@ -7,6 +7,7 @@ const router = Router()
 
 
 router.post("/", usuariosController.crearUsuario)
+router.get("/", usuariosController.obtenerUsuarios)
 router.post("/registrar-datos", checkAuth ,usuariosController.completarPerfil)
 router.post("/login", usuariosController.iniciarSesion)
 router.get("/confirmar/:token", usuariosController.confirmarUsuario)

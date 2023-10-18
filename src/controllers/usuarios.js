@@ -35,8 +35,6 @@ const crearUsuario = async (req, res) => {
             role: "new"
         })
 
-
-
         await usuario.save()
 
         return res.json({
@@ -290,11 +288,13 @@ const obtenerPerfil = async (req, res) => {
 
 const actualizarUsuario = async (req, res) => {
 
-    const { nombre, apellidos, telefono, direccion } = req.body
+    const { nombre, apellidos, telefono, direccion, informacion_personal } = req.body
     const { id: usuario_id } = req.usuario
 
     try {
         let usuario = await Usuario.findById(usuario_id)
+        let empleado = await Empleado.findById(usuario.id)
+
 
         if (!usuario) {
             const error = new Error("El usuario no existe")
@@ -312,6 +312,7 @@ const actualizarUsuario = async (req, res) => {
         usuario.apellidos = apellidos
         usuario.telefono = telefono
         usuario.direccion = direccion
+        empleado.informacion_personal = informacion_personal
  
         await usuario.save()
     } catch (error) {
@@ -320,9 +321,18 @@ const actualizarUsuario = async (req, res) => {
     }
 }
 
+const obtenerUsuarios = async (req, res) => {
+    try {
+        const usuarios = await Usuario.find()
+        return res.status(200).json({ usuarios })
+    } catch (error) {
+        return res.status(500).json({ error })
+    }
+}
+
 
 export default {
-    // obtenerUsuarios,
+    obtenerUsuarios,
     crearUsuario,
     iniciarSesion,
     confirmarUsuario,
