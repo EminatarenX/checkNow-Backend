@@ -21,7 +21,7 @@ const crearCategoria = async(req, res) => {
     }
 }
 
-// const obtenerCategoria = async(req, res) => {
+// const obtenerCategorias = async(req, res) => {
 //     const { id } = req.params
 //     const { empresa } = req
 //     try {
@@ -35,7 +35,7 @@ const crearCategoria = async(req, res) => {
 //     }
 // }
 
-const obtenerCategorias = async(req, res) => {
+const obtenerCategoria = async(req, res) => {
     const { id } = req.params
     try {
         const categorias = await Categoria.find({ departamento: id })
@@ -105,4 +105,4 @@ const eliminarCategoria = async(req, res) => {
     }
 }
 
-export default { crearCategoria, obtenerCategorias, editarCategoria, eliminarCategoria }
+export default { crearCategoria, obtenerCategoria, editarCategoria, eliminarCategoria }
