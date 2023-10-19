@@ -32,8 +32,8 @@ const crearPlaza = async (req, res) => {
   
 
   try {
-    const empresa = await Empresa.findById(empresa.id);
-    if (!empresa) {
+    const existeEmpresa = await Empresa.findById(empresa.id);
+    if (!existeEmpresa) {
       return res
         .status(404)
         .json({ msg: "Empresa no encontrada, intente mas tarde" });
