@@ -46,38 +46,38 @@ const obtenerCategoria = async(req, res) => {
     }
 }
 
-const editarCategoria = async(req, res) => {
-    const { id } = req.params
-    const { nombre, departamento } = req.body
-    const { empresa } = req
+// const editarCategoria = async(req, res) => {
+//     const { id } = req.params
+//     const { nombre, departamento } = req.body
+//     const { empresa } = req
 
-    try {
-        const categoria = await Categoria.findById(id)
-            .populate({
-                path: 'departamento',
-                select: '_id',
-                populate: {
-                    path: 'empresa',
-                    select: '_id'
-                }
-            })
+//     try {
+//         const categoria = await Categoria.findById(id)
+//             .populate({
+//                 path: 'departamento',
+//                 select: '_id',
+//                 populate: {
+//                     path: 'empresa',
+//                     select: '_id'
+//                 }
+//             })
 
-        if (!categoria) return res.status(404).json({ msg: "No se ha encontrado a esa categoria" });
+//         if (!categoria) return res.status(404).json({ msg: "No se ha encontrado a esa categoria" });
         
        
-        if(empresa.id !== categoria.departamento.empresa.id) return res.status(401).json({ msg: "No tienes permisos para editar esta categoria" })
+//         if(empresa.id !== categoria.departamento.empresa.id) return res.status(401).json({ msg: "No tienes permisos para editar esta categoria" })
 
-        categoria.nombre = nombre
-        categoria.departamento = departamento
-        await categoria.save()
+//         categoria.nombre = nombre
+//         categoria.departamento = departamento
+//         await categoria.save()
 
-        return res.status(200).json({ categoria })
+//         return res.status(200).json({ categoria })
 
-    }catch(error) {
-        console.log(error)
-        return res.status(500).json({ error })
-    }
-}
+//     }catch(error) {
+//         console.log(error)
+//         return res.status(500).json({ error })
+//     }
+// }
 
 const eliminarCategoria = async(req, res) => {
     const { id } = req.params
@@ -103,4 +103,4 @@ const eliminarCategoria = async(req, res) => {
     }
 }
 
-export default { crearCategoria, obtenerCategoria, editarCategoria, eliminarCategoria }
+export default { crearCategoria, obtenerCategoria, /*editarCategoria,*/ eliminarCategoria }
