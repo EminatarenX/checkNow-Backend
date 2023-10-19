@@ -28,11 +28,11 @@ const PlazaSchema = mongoose.Schema({
         default: {}
     },
     horario_entrada: {
-        type: Date,
+        type: String,
         required: true
     },
     horario_salida: {
-        type: Date,
+        type: String,
         required: true
     },
     empleado: {
