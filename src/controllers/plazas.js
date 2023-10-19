@@ -1,19 +1,35 @@
 import Empresa from "../models/Empresa.js";
 import Plaza from "../models/Plaza.js";
+import Categoria from "../models/Categoria.js";
 
 const obtenerPlazas = async (req, res) => {
   const { empresa } = req;
+  //todas las plazas de ese departamento
+  const { id } = req.params
+
   try{
-    if (!empresa) {
-      return res
-        .status(404)
-        .json({ msg: "Empresa no encontrada, intente mas tarde" });
-    }
-    const plazas = await Plaza.find({ categoria: { departamento: { empresa: empresa.id } } });
-    if(plazas.length === 0) return res.status(404).json({ msg: "No se han encontrado plazas" })
-    return res.status(200).json({ plazas })
+    if (!empresa) return res.status(404).json({ msg: "Empresa no encontrada, intente mas tarde" });
+    
+    const cat = await Categoria.findById(id)
+      .populate({
+        path: "departamento",
+        select: "_id",
+        populate: {
+          path: "empresa",
+          select: "_id",
+        },
+      })
+    if(!cat) return res.status(404).json({ msg: "Categoria no encontrada" })      
+    
+    if(cat.departamento.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para ver las plazas de esta categoria" })
+
+    const plazas = await Plaza.find({ categoria: id })
+    return res.json({ msg: "Plazas obtenidas correctamente", plazas });
+    
   }catch(error){
-    return res.status(500).json({ msg: "Error al obtener las plazas" });
+    console.log(error);
+    return res.status(500).json({ msg: "ErrorS al obtener las plazas" });
+
   }
 };
 
@@ -30,15 +46,22 @@ const crearPlaza = async (req, res) => {
   } = req.body;
   const { empresa } = req;
   
-
   try {
-    const existeEmpresa = await Empresa.findById(empresa.id);
-    if (!existeEmpresa) {
-      return res
-        .status(404)
-        .json({ msg: "Empresa no encontrada, intente mas tarde" });
-    }
+    if(!empresa) return res.json({msg: "Empresa no encontrada"})
 
+    const cat = await Categoria.findOne({ _id: categoria })
+      .populate({
+        path: "departamento",
+        select: "_id",
+        populate: {
+          path: "empresa",
+          select: "_id",
+        },
+      })
+    if(cat.departamento.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para crear en esta categoria" })
+
+    const existePlaza = await Plaza.findOne({ nombre, categoria })
+    if(existePlaza) return res.status(400).json({ msg: "Ya existe una plaza con ese nombre" })
     const plaza = new Plaza({
       nombre: nombre,
       categoria: categoria,

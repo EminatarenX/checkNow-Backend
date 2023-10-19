@@ -2,10 +2,8 @@ import mongoose from "mongoose";
 
 const PlazaSchema = mongoose.Schema({
     nombre: {
-        type: String, 
-        unique: true,
+        type: String,
         required: true,
-
     },
     categoria: {
         type: mongoose.Schema.Types.ObjectId,
