@@ -1,6 +1,7 @@
 
 import {Router} from "express"
 import plazasController from "../controllers/plazas.js"
+import { checkAuth } from "../helpers/checkAuth.js"
 
 const router = Router()
 
