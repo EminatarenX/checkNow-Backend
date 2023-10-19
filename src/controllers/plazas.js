@@ -28,10 +28,11 @@ const crearPlaza = async (req, res) => {
     horario_entrada,
     horario_salida
   } = req.body;
-  const { usuario } = req;
+  const { empresa } = req;
+  
 
   try {
-    const empresa = await Empresa.findOne({ id_creador: usuario.id });
+    const empresa = await Empresa.findById(empresa.id);
     if (!empresa) {
       return res
         .status(404)
