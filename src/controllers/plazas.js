@@ -144,7 +144,7 @@ const eliminarPlaza = async (req, res) => {
 
 }
 export default {
-  obtenerplazas,
+  obtenerPlazas,
   crearPlaza,
   modificarPlaza,
   eliminarPlaza,
