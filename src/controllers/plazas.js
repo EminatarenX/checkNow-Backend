@@ -10,7 +10,7 @@ const obtenerPlazas = async (req, res) => {
   try{
     if (!empresa) return res.status(404).json({ msg: "Empresa no encontrada, intente mas tarde" });
     
-    const cat = await Categoria.findById(id)
+    const categoria = await Categoria.findById(id)
       .populate({
         path: "departamento",
         select: "_id",
@@ -19,9 +19,9 @@ const obtenerPlazas = async (req, res) => {
           select: "_id",
         },
       })
-    if(!cat) return res.status(404).json({ msg: "Categoria no encontrada" })      
+    if(!categoria) return res.status(404).json({ msg: "Categoria no encontrada" })      
     
-    if(cat.departamento.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para ver las plazas de esta categoria" })
+    if(categoria.departamento.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para ver las plazas de esta categoria" })
 
     const plazas = await Plaza.find({ categoria: id })
     return res.json({ msg: "Plazas obtenidas correctamente", plazas });
@@ -94,44 +94,34 @@ const modificarPlaza = async (req, res) => {
     horario_entrada,
     horario_salida
   } = req.body;
-  const { plaza_id} = req.params;
-  const { usuario } = req;
+  const { id } = req.params;
+  const { empresa } = req;
 
   try {
-    const empresa = await Empresa.findOne({ id_creador: usuario.id });
-    if (!empresa) {
-      return res
-        .status(404)
-        .json({ msg: "Empresa no encontrada, intente mas tarde" });
-    }
+    if (!empresa) return res.status(404).json({ msg: "Empresa no encontrada, intente mas tarde" });
+    const plaza = await Plaza.findById(id)
+      .populate({
+        path: "empresa",
+        select: "_id",
+      })
+    if(!plaza) return res.status(404).json({ msg: "Plaza no encontrada" })
+    if(plaza.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para modificar esta plaza" })
 
-    const plaza = await Plaza.findOne({ _id: plaza_id });
-    if (!plaza) {
-      return res
-        .status(404)
-        .json({ msg: "Plaza no encontrada, intente mas tarde" });
-    }
+    const existePlaza = await Plaza.findOne({ nombre, categoria })
+    if(existePlaza) return res.status(400).json({ msg: "Ya existe una plaza con ese nombre" })
 
-    //si el usuario no es el creador de la empresa
-    if (empresa.id !== plaza.empresa) {
-      return res
-        .status(401)
-        .json({ msg: "No tiene permisos para modificar esta plaza" });
-    }
-
-    plaza.nombre = nombre;
-    plaza.categoria = categoria;
-    plaza.descripcion = descripcion;
-    plaza.supervisor = supervisor;
-    plaza.salario = salario;
-    plaza.habilidades = habilidades;
-    plaza.horario_entrada = horario_entrada;
-    plaza.horario_salida = horario_salida;
-    plaza.estado = estado;
-
-    await plaza.save();
-
-    return res.json({ msg: "Plaza modificada correctamente", plaza });
+    const plazaModificada = await Plaza.findByIdAndUpdate(id, {
+      nombre: nombre,
+      categoria: categoria,
+      descripcion: descripcion,
+      supervisor: supervisor,
+      salario: salario,
+      habilidades: habilidades,
+      horario_entrada: horario_entrada,
+      horario_salida: horario_salida,
+    });
+    return res.json({ msg: "Plaza modificada correctamente", plazaModificada });
+    
   } catch (error) {
     console.log(error);
     return res.status(500).json({ msg: "Error al modificar la plaza" });
@@ -139,27 +129,22 @@ const modificarPlaza = async (req, res) => {
 };
 
 const eliminarPlaza = async (req, res) => {
-    const { usuario } = req;
-    const { plaza_id } = req.params; //me quedé acá
+    const { empresa } = req;
+    const { id } = req.params;
 
     try{
-      const empresa = await Empresa.findOne({ id_creador: usuario.id });
-      if (!empresa) {
-        return res
-          .status(404)
-          .json({ msg: "Empresa no encontrada, intente mas tarde" });
-      }
-  
-      const plaza = await Plaza.findOne({ _id: plaza_id });
-      if (!plaza) {
-        return res
-          .status(404)
-          .json({ msg: "Plaza no encontrada, intente mas tarde" });
-      }
-  
-      await plaza.delete();
-  
-      return res.json({ msg: "Plaza eliminada correctamente", plaza });
+      if(!empresa) return res.status(404).json({ msg: "Empresa no encontrada, intente mas tarde" });
+      const plaza = await Plaza.findById(id)
+        .populate({
+          path: "empresa",
+          select: "_id",
+        })
+      if(!plaza) return res.status(404).json({ msg: "Plaza no encontrada" })
+      if(plaza.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para eliminar esta plaza" })
+
+      await plaza.deleteOne()
+      return res.json({ msg: "Plaza eliminada correctamente" });
+
     }catch(error){
       console.log(error)
       return res.status(500).json({ msg: "Error al eliminar la plaza" });
