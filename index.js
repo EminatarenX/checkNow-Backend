@@ -20,7 +20,7 @@ app.use(express.json())
 
 const origin = process.env.FRONTEND_URL
 app.use(cors({
-    origin: [origin, 'http://localhost:5173', "https://develop--checknowdev.netlify.app/login"],
+    origin: [origin, 'http://localhost:5173', "https://develop--checknowdev.netlify.app"],
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }))
 
