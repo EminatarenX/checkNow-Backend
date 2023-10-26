@@ -10,4 +10,5 @@ router.get("/:id", checkAuth, categoriaController.obtenerCategoria)
 //router.put("/editar/:id", checkAuth,categoriaController.editarCategoria)
 router.delete("/eliminar/:id",checkAuth, categoriaController.eliminarCategoria)
 
+
 export default router

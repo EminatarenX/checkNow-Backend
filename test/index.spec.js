@@ -10,7 +10,7 @@ describe('Test de inicio de sesion', () => {
             .set('Content-Type', 'application/json')
             .send({
                 correo: 'emi@gmail.com',
-                password: '123456'
+                password: '12345'
             });
         
         expect(response.status).toBe(400);

@@ -152,9 +152,63 @@ const eliminarPlaza = async (req, res) => {
 
 
 }
+
+const getPlaza = async(req,res) => {
+  const { id } = req.params;
+
+  try {
+    const existePlaza = await Plaza.findById(id)
+    
+    if(!existePlaza) return res.status(404).json({ msg: "Plaza no encontrada" })
+
+    if(!existePlaza.empleado) {
+      const plaza = await Plaza.findById(id)
+        .populate({
+          path: "categoria",
+          select: "_id nombre",
+          populate: {
+            path: "departamento",
+            select: "_id nombre",
+            populate: {
+              path: "empresa",
+              select: "_id nombre",
+            }
+          }
+        })
+
+      if(plaza.categoria.departamento.empresa.id !== req.empresa.id) 
+      return res.status(401).json({ msg: "No tienes permisos para ver esta plaza" })
+
+      return res.json({ plaza });
+    }else{
+      const plaza = await Plaza.findById(id)
+        .populate({
+          path: "categoria",
+          select: "_id nombre",
+          populate: {
+            path: "departamento",
+            select: "_id nombre",
+            populate: {
+              path: "empresa",
+              select: "_id nombre",
+            }
+          }
+        })
+        .populate({
+          path: "empleado",
+        })
+      return res.json({ plaza });
+    }
+
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 export default {
   obtenerPlazas,
   crearPlaza,
   modificarPlaza,
   eliminarPlaza,
+  getPlaza
 };
