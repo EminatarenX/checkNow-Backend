@@ -5,9 +5,9 @@ import { checkAuth } from "../helpers/checkAuth.js"
 
 const router = Router()
 
-router.route("/")
-    .post(checkAuth, empresasController.actualizarDatosEmpresa)
-    .get(checkAuth, empresasController.obtenerEmpresa)
-    .delete(checkAuth, empresasController.eliminarEmpresa)
+router.get("/", checkAuth, empresasController.obtenerEmpresa);
+router.post("/editar/", checkAuth, empresasController.actualizarDatosEmpresa);
+router.get("/:id", checkAuth, empresasController.buscarEmpresa);
+router.delete("/:id", checkAuth, empresasController.eliminarEmpresa);
 
 export default router

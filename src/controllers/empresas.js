@@ -1,5 +1,25 @@
 import Empresa from '../models/Empresa.js'
 
+const buscarEmpresa = async (req, res) => {
+
+    const { id } = req.params;
+
+    try {
+        const empresa = await Empresa.findById(id)
+
+        if (!empresa) {
+            return res.status(404).json({ msg: "Empresa no encontrada, intente mas tarde" })
+        }
+
+        return res.status(200).json({ empresa })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ msg: "Error al buscar la empresa" })
+    }
+
+};
+
 const obtenerEmpresa = async (req, res) => {
 
     const { id } = req.empresa
@@ -75,5 +95,6 @@ const eliminarEmpresa = async (req, res) => {
 export default {
     obtenerEmpresa,
     actualizarDatosEmpresa,
-    eliminarEmpresa
+    eliminarEmpresa,
+    buscarEmpresa
 }
