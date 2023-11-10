@@ -7,7 +7,6 @@ const router = Router()
 
 router.get("/", checkAuth, empresasController.obtenerEmpresa);
 router.post("/editar/", checkAuth, empresasController.actualizarDatosEmpresa);
-router.get("/:id", checkAuth, empresasController.buscarEmpresa);
 router.delete("/:id", checkAuth, empresasController.eliminarEmpresa);
 
 export default router

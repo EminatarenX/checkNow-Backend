@@ -205,10 +205,42 @@ const getPlaza = async(req,res) => {
   }
 }
 
+const buscarPlazaEmpleado = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+
+    const plaza = await Plaza.findById(id)
+      .populate({
+        path: "categoria",
+        select: "nombre",
+        populate: {
+          path: "departamento",
+          select: "nombre",
+          populate: {
+            path: "empresa",
+            select: "nombre",
+          }
+        }
+      })
+
+    if(!plaza) return res.status(404).json({ msg: "Plaza no encontrada" })
+
+    if(plaza.empleado) return res.status(400).json({ msg: "Esta plaza ya tiene un empleado" })
+
+    return res.json({ plaza })
+    
+  } catch (error) {
+    console.log(error)
+    return res.status(400).json({msg: 'Error al buscar la plaza'})
+  }
+}
+
 export default {
   obtenerPlazas,
   crearPlaza,
   modificarPlaza,
   eliminarPlaza,
-  getPlaza
+  getPlaza,
+  buscarPlazaEmpleado
 };

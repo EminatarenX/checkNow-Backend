@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import Usuario from "../models/Usuario.js";
 import Empresa from "../models/Empresa.js";
+import Empleado from "../models/Empleado.js";
 
 async function checkAuth(req, res, next) {
     let token;
@@ -21,6 +22,13 @@ async function checkAuth(req, res, next) {
         
 
         if(usuario.role !== "admin") {
+            const empleado = await Empleado.findOne({usuario: id})
+                .populate("empresa")
+                .populate("plaza")
+           
+            if(!empleado) return next()
+
+            req.empleado = empleado
             return next()
         }
     

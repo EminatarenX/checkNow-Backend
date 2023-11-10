@@ -1,4 +1,6 @@
 import Empleado from '../models/Empleado.js'
+import Empresa from '../models/Empresa.js'
+import Usuario from '../models/Usuario.js'
 
 const obtenerEmpleados = async(req, res) => {
 
@@ -94,5 +96,30 @@ const editarEmpleado = async (req, res) => { /* Esta función la ejecuta el empl
 
 }
 
+const JoinEmpresa = async (req, res) => {
+    const { usuario } = req
+    const { empresa: empresa_id, plaza } = req.body
+  
 
-export default{ obtenerEmpleados, editarTuEmpleado, eliminarEmpleado, editarEmpleado }
+    try {
+        const empleado = await Empleado.findOne({usuario: usuario.id})
+        empleado.empresa = empresa_id
+        empleado.plaza = plaza
+        await empleado.save()
+        
+        return res.status(200).json({msg: "Se ha unido a la empresa"})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: "no se pudo actualizar la informacion", error })
+    }
+}
+
+const obtenerEmpleadoinfo = async(req, res) => {
+
+    const { empleado } = req    
+    return res.status(200).json({ empleado})
+    
+
+}
+
+export default{ obtenerEmpleados, editarTuEmpleado, eliminarEmpleado, editarEmpleado, JoinEmpresa, obtenerEmpleadoinfo }

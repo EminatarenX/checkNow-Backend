@@ -45,7 +45,7 @@ const UsuarioSchema = mongoose.Schema({
         type: Boolean,
         default: false
     },
-    idEmpresa:{
+    empresa:{
         type: mongoose.Schema.Types.ObjectId,
         ref: "Empresa"
     },
