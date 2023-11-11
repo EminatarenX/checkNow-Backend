@@ -1,5 +1,6 @@
 import Empresa from '../models/Empresa.js'
-
+import Empleado from '../models/Empleado.js'
+import Solicitud from '../models/Solicitud.js'
 
 
 const obtenerEmpresa = async (req, res) => {
@@ -75,8 +76,80 @@ const eliminarEmpresa = async (req, res) => {
     }
 }
 
+const obtenerSolicitudes = async (req, res) => {
+    const { empresa } = req
+
+    try {
+        const solicitudes = await Solicitud.find({empresa: empresa.id})
+            .populate({
+                path: "empleado",
+                populate: {
+                    path: "usuario",
+                }
+            })
+            .populate("plaza")
+        if(!solicitudes){
+            return res.status(404).json({msg: "No se encontraron solicitudes"})
+        }
+
+        return res.status(200).json({solicitudes})
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: "Error al obtener las solicitudes"})
+    }
+}
+
+
+const aceptarSolicitud = async (req, res) => {
+    const { empresa } = req
+    const { empleado, plaza, solicitud } = req.body
+
+    try {
+        await Solicitud.findByIdAndDelete(solicitud)
+        
+        const existeEmpleado = await Empleado.findById(empleado)
+
+        existeEmpleado.empresa = empresa.id
+        existeEmpleado.plaza = plaza
+        await existeEmpleado.save()
+    
+    return res.status(200).json({empleado: existeEmpleado})
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: "No se pudo unir a la empresa"})
+    }
+}
+
+const rechazarSolicitud = async(req, res) => {
+    const { id } = req.params
+
+    try {
+        const existeSolicitud = await Solicitud.findById(id)
+
+        if(!existeSolicitud){
+            return res.status(404).json({msg: "No se encontro la solicitud"})
+        }
+
+        if(existeSolicitud.empresa != req.empresa.id){
+            return res.status(400).json({msg: "No tienes permiso para rechazar esta solicitud"})
+        }
+        
+        await Solicitud.findByIdAndDelete(id)
+
+        return res.status(200).json({msg: "Solicitud rechazada correctamente"})
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: "Error al rechazar la solicitud"})
+    }
+}
+
 export default {
     obtenerEmpresa,
     actualizarDatosEmpresa,
     eliminarEmpresa,
+    obtenerSolicitudes,
+    aceptarSolicitud,
+    rechazarSolicitud
 }

@@ -9,7 +9,7 @@ router.get('/', checkAuth, empleadosController.obtenerEmpleados)
 router.put("/editar/:id", empleadosController.editarTuEmpleado)
 router.delete("/eliminar/:id", checkAuth, empleadosController.eliminarEmpleado)
 router.put("/editar", checkAuth, empleadosController.editarEmpleado)
-router.post("/acceder", checkAuth,empleadosController.JoinEmpresa)
+router.post("/solicitud", checkAuth,empleadosController.enviarSolicitud)
 router.get('/getInfo', checkAuth, empleadosController.obtenerEmpleadoinfo)
 
 export default router

@@ -1,6 +1,7 @@
 import Departamento from '../models/Departamento.js'
 
 const obtenerDepartamentos = async (req, res) => {
+    
     const { id } = req.empresa
 
     try {

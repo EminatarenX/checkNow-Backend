@@ -1,6 +1,5 @@
 import Empleado from '../models/Empleado.js'
-import Empresa from '../models/Empresa.js'
-import Usuario from '../models/Usuario.js'
+import Solicitud from '../models/Solicitud.js'
 
 const obtenerEmpleados = async(req, res) => {
 
@@ -69,7 +68,7 @@ const eliminarEmpleado = async(req, res) => {
 
 const editarEmpleado = async (req, res) => { /* Esta función la ejecuta el empleado*/
 
-    const { usuario } = req;
+    const { usuario } = req;    
     const { informacion_personal } = req.body;
 
     if(!usuario.empresa){
@@ -96,23 +95,27 @@ const editarEmpleado = async (req, res) => { /* Esta función la ejecuta el empl
 
 }
 
-const JoinEmpresa = async (req, res) => {
-    const { usuario } = req
+const enviarSolicitud = async (req, res) => {
+    const { usuario, empleado } = req
     const { empresa: empresa_id, plaza } = req.body
   
 
     try {
-        const empleado = await Empleado.findOne({usuario: usuario.id})
-        empleado.empresa = empresa_id
-        empleado.plaza = plaza
-        await empleado.save()
         
-        return res.status(200).json({msg: "Se ha unido a la empresa"})
+        const existeSolicitud = await Solicitud.findOne({empleado: empleado.id})
+        if(existeSolicitud){
+            return res.status(400).json({msg: "Ya has enviado una solicitud"})
+        }
+        const solicitud = await Solicitud.create({empleado: empleado.id, empresa: empresa_id, plaza})
+        return res.status(200).json({msg: "Solicitud enviada correctamente", solicitud})    
+     
     } catch (error) {
         console.log(error)
         return res.status(500).json({msg: "no se pudo actualizar la informacion", error })
     }
 }
+
+
 
 const obtenerEmpleadoinfo = async(req, res) => {
 
@@ -122,4 +125,4 @@ const obtenerEmpleadoinfo = async(req, res) => {
 
 }
 
-export default{ obtenerEmpleados, editarTuEmpleado, eliminarEmpleado, editarEmpleado, JoinEmpresa, obtenerEmpleadoinfo }
+export default{ obtenerEmpleados, editarTuEmpleado, eliminarEmpleado, editarEmpleado,   enviarSolicitud, obtenerEmpleadoinfo }
