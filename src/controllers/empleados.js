@@ -9,8 +9,20 @@ const obtenerEmpleados = async(req, res) => {
     }
     try {
         const empleados = await Empleado.find({ empresa: empresa.id })
+            .populate("usuario").populate({
+                path: "plaza",
+                populate: {
+                    path: "categoria",
+                    populate: {
+                        path: "departamento"
+                    }
+                }
+            })
+
+      
         return res.status(200).json({ empleados })
     }catch(error) {
+        console.log(error)
         return res.status(500).json({ error })
     }
 
