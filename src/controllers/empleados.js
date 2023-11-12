@@ -1,6 +1,7 @@
 import Empleado from '../models/Empleado.js'
 import Solicitud from '../models/Solicitud.js'
 
+
 const obtenerEmpleados = async(req, res) => {
 
     const { empresa } = req
@@ -108,18 +109,33 @@ const editarEmpleado = async (req, res) => { /* Esta función la ejecuta el empl
 }
 
 const enviarSolicitud = async (req, res) => {
-    const { usuario, empleado } = req
+    const { empleado } = req
     const { empresa: empresa_id, plaza } = req.body
   
 
     try {
+
+        const plazaOcupada = await Empleado.findOne({plaza: plaza})
+        if(plazaOcupada){
+            return res.status(400).json({msg: "La plaza ya está ocupada"})
+        }
         
         const existeSolicitud = await Solicitud.findOne({empleado: empleado.id})
         if(existeSolicitud){
             return res.status(400).json({msg: "Ya has enviado una solicitud"})
         }
         const solicitud = await Solicitud.create({empleado: empleado.id, empresa: empresa_id, plaza})
-        return res.status(200).json({msg: "Solicitud enviada correctamente", solicitud})    
+        const solicitudPopulada = await Solicitud.findById(solicitud.id)
+            .populate({
+                path: "empleado",
+                populate: {
+                    path: "usuario"
+                }
+            })
+            .populate("plaza")
+
+        
+        return res.status(200).json({msg: "Solicitud enviada", solicitud: solicitudPopulada})    
      
     } catch (error) {
         console.log(error)
@@ -136,5 +152,6 @@ const obtenerEmpleadoinfo = async(req, res) => {
     
 
 }
+
 
 export default{ obtenerEmpleados, editarTuEmpleado, eliminarEmpleado, editarEmpleado,   enviarSolicitud, obtenerEmpleadoinfo }

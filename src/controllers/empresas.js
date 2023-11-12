@@ -145,11 +145,34 @@ const rechazarSolicitud = async(req, res) => {
     }
 }
 
+const obtenerEmpleadoEnPlaza = async( req, res) => {
+    const { empresa } = req
+    const { id } = req.params
+
+    try {
+        const empleado = await Empleado.findOne({empresa: empresa.id, plaza: id})
+            .populate("usuario")
+            .populate("plaza")
+
+        if(!empleado){
+            return res.status(404).json({msg: "No se encontro el empleado"})
+        }
+
+        return res.status(200).json({empleado})
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: "Error al obtener el empleado"})
+    }
+
+}
+
 export default {
     obtenerEmpresa,
     actualizarDatosEmpresa,
     eliminarEmpresa,
     obtenerSolicitudes,
     aceptarSolicitud,
-    rechazarSolicitud
+    rechazarSolicitud,
+    obtenerEmpleadoEnPlaza
 }

@@ -33,8 +33,30 @@ app.use('/api/categorias', categoriasRouter);
 app.use('/api/plazas', plazasRouter);
 // app.use('/api/solicitudes', solicitudesRouter);
 
-app.listen(puerto, () => {
+const servidor = app.listen(puerto, () => {
     console.log('Servidor corriendo en puerto', puerto)
 })
 
-export default app
+// socket.io
+import { Server as SocketServer } from 'socket.io'
+
+const io = new SocketServer(servidor, {
+    pingTimeout: 60000,
+    cors: {
+        origin: [origin, 'http://localhost:5173', "https://develop--checknowdev.netlify.app"]
+    }
+})
+
+io.on('connection', socket => {
+
+    socket.on('solicitudes', (empresa) => {
+        socket.join(empresa)
+    })
+    
+    socket.on('enviar solicitud', (data) => {
+        const empresa = data.empresa
+        io.to(empresa).emit('solicitud recibida', data)
+    })
+
+    
+})
