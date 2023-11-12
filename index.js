@@ -58,5 +58,4 @@ io.on('connection', socket => {
         io.to(empresa).emit('solicitud recibida', data)
     })
 
-    
 })

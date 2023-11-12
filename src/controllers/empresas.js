@@ -113,6 +113,8 @@ const aceptarSolicitud = async (req, res) => {
         existeEmpleado.empresa = empresa.id
         existeEmpleado.plaza = plaza
         await existeEmpleado.save()
+
+        
     
     return res.status(200).json({empleado: existeEmpleado})
     } catch (error) {
