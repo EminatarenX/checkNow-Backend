@@ -1,6 +1,7 @@
 import Empresa from "../models/Empresa.js";
 import Plaza from "../models/Plaza.js";
 import Categoria from "../models/Categoria.js";
+import Empleado from "../models/Empleado.js";
 
 const obtenerPlazas = async (req, res) => {
   const { empresa } = req;
@@ -88,7 +89,6 @@ const modificarPlaza = async (req, res) => {
     nombre,
     categoria,
     descripcion,
-    supervisor,
     salario,
     habilidades,
     horario_entrada,
@@ -107,20 +107,33 @@ const modificarPlaza = async (req, res) => {
     if(!plaza) return res.status(404).json({ msg: "Plaza no encontrada" })
     if(plaza.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para modificar esta plaza" })
 
-    const existePlaza = await Plaza.findOne({ nombre, categoria })
-    if(existePlaza) return res.status(400).json({ msg: "Ya existe una plaza con ese nombre" })
 
-    const plazaModificada = await Plaza.findByIdAndUpdate(id, {
+    await Plaza.findByIdAndUpdate(id, {
       nombre: nombre,
       categoria: categoria,
       descripcion: descripcion,
-      supervisor: supervisor,
       salario: salario,
       habilidades: habilidades,
       horario_entrada: horario_entrada,
       horario_salida: horario_salida,
     });
-    return res.json({ msg: "Plaza modificada correctamente", plazaModificada });
+
+    const plazaModificada = await Plaza.findById(id)
+      .populate({
+        path: "categoria",
+        select: "_id nombre",
+        populate: {
+          path: "departamento",
+          select: "_id nombre",
+          populate: {
+            path: "empresa",
+            select: "_id nombre",
+          }
+        }
+      })
+
+
+    return res.json({ msg: "Plaza modificada correctamente", plaza: plazaModificada });
     
   } catch (error) {
     console.log(error);
@@ -133,14 +146,20 @@ const eliminarPlaza = async (req, res) => {
     const { id } = req.params;
 
     try{
-      if(!empresa) return res.status(404).json({ msg: "Empresa no encontrada, intente mas tarde" });
+     
       const plaza = await Plaza.findById(id)
         .populate({
           path: "empresa",
           select: "_id",
+
         })
+
       if(!plaza) return res.status(404).json({ msg: "Plaza no encontrada" })
+      
       if(plaza.empresa.id !== empresa.id) return res.status(401).json({ msg: "No tienes permisos para eliminar esta plaza" })
+        
+        const existeEmpleado = await Empleado.findOne({ plaza: id})
+        if(existeEmpleado) return res.status(400).json({ msg: "Esta plaza tiene un empleado, no se puede eliminar" })
 
       await plaza.deleteOne()
       return res.json({ msg: "Plaza eliminada correctamente" });

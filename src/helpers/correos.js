@@ -4,6 +4,8 @@ const emailRegistro = async(datos) => {
 
     const { correo, token} = datos
 
+    try{
+
     const transport = nodemailer.createTransport({
         host: "sandbox.smtp.mailtrap.io",
         post: "2525",
@@ -11,19 +13,18 @@ const emailRegistro = async(datos) => {
             user: "5c73a16264e257",
             pass: "b0b35da0d73cce"
           }
-
         // service: "gmail",
         // auth: {
         //   user: "estudiaconofort@gmail.com",
         //   pass: "iwmjexmtnnicglsr"
-    // }
+        // }
     })
 
     const info = await transport.sendMail({
-        from: '"Check-now - Administra tu "negocio" <cuentas@checknow.com>',
+        from: '"Check-Now - Administra tu "negocio" <no-reply@checknow.com>',
         to: correo,
-        subject: "Check - Now Confirma tu cuenta!",
-        text: "Bienvenido a Check Now",
+        subject: "Check-Now confirma tu cuenta",
+        text: "Bienvenido a Check-Now",
         html: `
         <!DOCTYPE html>
         <html>
@@ -105,24 +106,29 @@ const emailRegistro = async(datos) => {
         
             <main class="main">
                 <div class="card">
-                    <h1>Check Now</h1>
-                    <p>¡Hola!, bienvenido a Check Now</p>
-                    <p>Confirma tu cuenta haciendo click en el siguiente enlace:</p>
+                    <h1>Check-Now</h1>
+                    <p>¡Hola!, bienvenido a Check-Now.</p>
+                    <p>Confirma tu cuenta haciendo clic en el siguiente enlace:</p>
                     <a href="${process.env.FRONTEND_URL}/confirmar/${token}" class="btn">Comprobar cuenta</a>
         
-                    <p class="text-muted">Si no creaste esta cuenta, ignora este mensaje.</p>
+                    <p class="text-muted">Si no reconoces esta operación, ignora este mensaje.</p>
                 </div>
             </main>
         </body>
         </html>
         `
     })
+    }catch(error){
+    console.log(error)
+    }
 }
 
 const emailCambiarPassword = async(datos) => {
     
         const { correo, token} = datos
-    
+
+        try{
+
         const transport = nodemailer.createTransport({
             host: "sandbox.smtp.mailtrap.io",
             post: "2525",
@@ -135,14 +141,14 @@ const emailCambiarPassword = async(datos) => {
             // auth: {
             //   user: "estudiaconofort@gmail",
             //   pass: "iwmjexmtnnicglsr"
-        // }
+            // }
         })
 
         const info = await transport.sendMail({
-            from: '"Check-now - Administra tu "negocio" <cuentas@checknow.com>',
+            from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
             to: correo,
-            subject: "Check - Now Cambia tu contraseña!",
-            text: "Bienvenido a Check Now",
+            subject: "Check-Now Cambia tu contraseña",
+            text: "Bienvenido a Check-Now",
             html: `
             <!DOCTYPE html>
             <html>
@@ -225,18 +231,21 @@ const emailCambiarPassword = async(datos) => {
             
                 <main class="main">
                     <div class="card">
-                        <h1>Check Now</h1>
-                        <p>Restablecer contraseña Check Now</p>
+                        <h1>Check-Now</h1>
+                        <p>Restablecer contraseña Check-Now.</p>
                         <p>Haz clic en el siguiente enlace para cambiar la contraseña:</p>
                         <a href="${process.env.FRONTEND_URL}/recovery/${token}" class="btn">Cambiar contraseña</a>
             
-                        <p class="text-muted">Si no has solicitado esto entonces ignora este mensaje.</p>
+                        <p class="text-muted">Si no reconoces esta operacion, ignora este mensaje.</p>
                     </div>
                 </main>
             </body>
             </html>
             `
         })
+    }catch(error){
+        console.log(error)
+    }
 }
 export {
     emailRegistro,
