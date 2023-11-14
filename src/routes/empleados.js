@@ -11,5 +11,6 @@ router.delete("/eliminar/:id", checkAuth, empleadosController.eliminarEmpleado)
 router.put("/editar", checkAuth, empleadosController.editarEmpleado)
 router.post("/solicitud", checkAuth,empleadosController.enviarSolicitud)
 router.get('/getInfo', checkAuth, empleadosController.obtenerEmpleadoinfo)
+router.get("/admin/:id", checkAuth, empleadosController.getEmpleadoAdmin)
 
 export default router

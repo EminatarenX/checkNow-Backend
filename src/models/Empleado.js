@@ -26,16 +26,12 @@ const EmpleadoSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Plaza"
     },
-    entradas: [
+    checks: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Entrada"
+            ref: "Check"
         }
     ],
-    salidas: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Salida"
-    }],
     created_at: {
         type: Date,
         default: Date.now()

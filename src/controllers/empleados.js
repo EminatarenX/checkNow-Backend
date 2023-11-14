@@ -1,5 +1,6 @@
 import Empleado from '../models/Empleado.js'
 import Solicitud from '../models/Solicitud.js'
+import Check from '../models/Check.js'
 
 
 const obtenerEmpleados = async(req, res) => {
@@ -153,5 +154,37 @@ const obtenerEmpleadoinfo = async(req, res) => {
 
 }
 
+const getEmpleadoAdmin = async (req, res) => {
+    const { id } = req.params
 
-export default{ obtenerEmpleados, editarTuEmpleado, eliminarEmpleado, editarEmpleado,   enviarSolicitud, obtenerEmpleadoinfo }
+    try {
+        const empleado = await Empleado.findById(id)
+            .populate("usuario")
+            .populate({
+                path: "plaza",
+                populate: {
+                    path: "categoria",
+                    populate: {
+                        path: "departamento"
+                    }
+                }
+            }).populate("empresa")
+        if(!empleado) return res.status(404).json({msg: "No se ha encontrado a ese empleado"}); // Si no existe, devuelve un error
+
+        const checks = await Check.find({empleado: id})
+            .populate("empleado")
+        
+        let empleadoChecks = empleado
+        empleadoChecks.checks = checks
+
+        return res.status(200).json({ empleado: empleadoChecks })
+        
+
+    }catch(error){
+     
+        return res.status(500).json({msg: "No se pudo obtener el empleado", error})
+    }
+}
+
+
+export default{ obtenerEmpleados, editarTuEmpleado, eliminarEmpleado, editarEmpleado,   enviarSolicitud, obtenerEmpleadoinfo, getEmpleadoAdmin }
