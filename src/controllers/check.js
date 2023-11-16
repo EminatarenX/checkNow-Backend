@@ -88,44 +88,98 @@ const registrarCheckUsuario = async (req, res) => {
 
     try {
 
-        const checkSinSalida = await Check.findOne({empleado: empleado.id, fecha_salida: null}).sort({fecha_entrada: -1});
+        const checkSinSalida = await Check.findOne({empleado: empleado.id}).sort({fecha_entrada: -1});
 
-        if(checkSinSalida){
-            return res.status(400).json({msg: "Ya hay un registro de entrada sin salida"})
-        }
+        if(!checkSinSalida){
 
-        const check = await Check.create({
-            empresa: empleado.empresa.id,
-            empleado: empleado.id,
-            comentarios
-        });
+            const check = await Check.create({
+                empresa: empleado.empresa.id,
+                empleado: empleado.id,
+                comentarios
+            });
 
-        const checkEncontrado = await Check.findById(check.id)
-        .populate({
-            path: "empleado",
-            populate: [
-                {
-                    path: "plaza",
-                    populate: {
-                        path: "categoria",
+            const checkEncontrado = await Check.findById(check.id)
+            .populate({
+                path: "empleado",
+                populate: [
+                    {
+                        path: "plaza",
                         populate: {
-                            path: "departamento"
+                            path: "categoria",
+                            populate: {
+                                path: "departamento"
+                            }
                         }
+                    },
+                    {
+                        path: "usuario" // Agregamos el populate para "usuario" aquí
                     }
-                },
-                {
-                    path: "usuario" // Agregamos el populate para "usuario" aquí
-                }
-            ]
-        });
-        
-        if(!checkEncontrado){
-            return res.status(404).json({msg: "No se pudo mandar la solicitud, intente mas tarde"})
-        };
+                ]
+            });
+            
+            if(!checkEncontrado){
+                return res.status(404).json({msg: "No se pudo mandar la solicitud, intente mas tarde"})
+            };
 
-        return res.status(200).json({
-            check: checkEncontrado
-        });
+            return res.status(200).json({
+                check: checkEncontrado
+            });
+        }else {
+            const fechaActual = new Date()
+            const dia = fechaActual.getDay()
+            const mes = fechaActual.getMonth()
+            const year = fechaActual.getFullYear()
+
+            const fechaCheck = new Date(checkSinSalida.fecha_entrada)
+            const diaCheck = fechaCheck.getDay()
+            const mesCheck = fechaCheck.getMonth()
+            const yearCheck = fechaCheck.getFullYear()
+    
+          
+            if(!checkSinSalida.fecha_salida){
+                return res.status(400).json({msg: 'Hay un registro de entrada sin salida, registra tu salida'})
+            }
+
+            if(yearCheck === year && mesCheck === mes && dia === diaCheck){
+                return res.status(401).json({msg: 'Ya registraste una entrada el dia de hoy'})
+            }
+
+            const check = await Check.create({
+                empresa: empleado.empresa.id,
+                empleado: empleado.id,
+                comentarios
+            });
+
+            const checkEncontrado = await Check.findById(check.id)
+            .populate({
+                path: "empleado",
+                populate: [
+                    {
+                        path: "plaza",
+                        populate: {
+                            path: "categoria",
+                            populate: {
+                                path: "departamento"
+                            }
+                        }
+                    },
+                    {
+                        path: "usuario" // Agregamos el populate para "usuario" aquí
+                    }
+                ]
+            });
+            
+            if(!checkEncontrado){
+                return res.status(404).json({msg: "No se pudo mandar la solicitud, intente mas tarde"})
+            };
+
+            return res.status(200).json({
+                check: checkEncontrado
+            });
+
+    
+        }
+       
         
         
     } catch (error) {
