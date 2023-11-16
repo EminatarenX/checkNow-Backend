@@ -6,7 +6,8 @@ import departamentosRouter from './src/routes/departamento.js'
 import empleadosRouter from './src/routes/empleados.js'
 import categoriasRouter from './src/routes/categoria.js'
 import plazasRouter from './src/routes/plazas.js'
-// import solicitudesRouter from "./src/routes/solicitud.js"
+import checksRouter from './src/routes/check.js'
+
 import { ConectarDB } from './src/db/connection.js'
 import cors from 'cors'
 config()
@@ -31,7 +32,7 @@ app.use('/api/departamentos', departamentosRouter);
 app.use('/api/empleados', empleadosRouter);
 app.use('/api/categorias', categoriasRouter);
 app.use('/api/plazas', plazasRouter);
-// app.use('/api/solicitudes', solicitudesRouter);
+app.use('/api/checks', checksRouter);
 
 const servidor = app.listen(puerto, () => {
     console.log('Servidor corriendo en puerto', puerto)
@@ -56,6 +57,11 @@ io.on('connection', socket => {
     socket.on('enviar solicitud', (data) => {
         const empresa = data.empresa
         io.to(empresa).emit('solicitud recibida', data)
+    })
+
+    socket.on('nueva entrada', (check) => {
+        const empresa = check.empresa
+        socket.to(empresa).emit('entrada recibida', check)
     })
 
 })

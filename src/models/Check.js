@@ -14,14 +14,13 @@ const CheckSchema = mongoose.Schema({
     fecha_entrada: {
         type: Date,
         default: Date.now(),
-        required: true
     },
     fecha_salida: {
         type: Date
     },
     comentarios: {
         type: String,
-        enum: ["puntual, no asistió, tarde, permiso"],
+        enum: ["Puntual", "No asistio", "Tarde", "Permiso"],
     }
 })
 

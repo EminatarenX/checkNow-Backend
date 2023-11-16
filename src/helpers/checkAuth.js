@@ -24,6 +24,7 @@ async function checkAuth(req, res, next) {
         if(usuario.role !== "admin") {
             const empleado = await Empleado.findOne({usuario: id})
                 .populate("empresa")
+                .populate("usuario")
                 .populate("plaza")
            
             if(!empleado) return next()
