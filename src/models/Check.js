@@ -13,7 +13,7 @@ const CheckSchema = mongoose.Schema({
     },
     fecha_entrada: {
         type: Date,
-        default: Date.now(),
+        default: Date.now,
     },
     fecha_salida: {
         type: Date
