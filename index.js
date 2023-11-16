@@ -53,6 +53,10 @@ io.on('connection', socket => {
     socket.on('solicitudes', (empresa) => {
         socket.join(empresa)
     })
+
+    socket.on('checks', (empresa) => {
+        socket.join(empresa)
+    })
     
     socket.on('enviar solicitud', (data) => {
         const empresa = data.empresa
