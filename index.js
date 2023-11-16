@@ -65,7 +65,7 @@ io.on('connection', socket => {
 
     socket.on('nueva entrada', (check) => {
         const empresa = check.empresa
-        socket.to(empresa).emit('entrada recibida', check)
+        io.to(empresa).emit('entrada recibida', check)
     })
 
 })
