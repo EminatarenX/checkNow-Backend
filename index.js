@@ -54,7 +54,7 @@ io.on('connection', socket => {
         socket.join(empresa)
     })
 
-    socket.on('checks', (empresa) => {
+    socket.on('checks admin', (empresa) => {
         socket.join(empresa)
     })
     

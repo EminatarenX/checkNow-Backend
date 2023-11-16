@@ -147,6 +147,7 @@ const registrarCheckUsuario = async (req, res) => {
             const check = await Check.create({
                 empresa: empleado.empresa.id,
                 empleado: empleado.id,
+                fecha_entrada: Date.now(),
                 comentarios
             });
 
