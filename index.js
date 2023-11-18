@@ -7,6 +7,7 @@ import empleadosRouter from './src/routes/empleados.js'
 import categoriasRouter from './src/routes/categoria.js'
 import plazasRouter from './src/routes/plazas.js'
 import checksRouter from './src/routes/check.js'
+import nominasRouter from './src/routes/nomina.js'
 
 import { ConectarDB } from './src/db/connection.js'
 import cors from 'cors'
@@ -33,6 +34,7 @@ app.use('/api/empleados', empleadosRouter);
 app.use('/api/categorias', categoriasRouter);
 app.use('/api/plazas', plazasRouter);
 app.use('/api/checks', checksRouter);
+app.use('/api/nominas', nominasRouter);
 
 const servidor = app.listen(puerto, () => {
     console.log('Servidor corriendo en puerto', puerto)

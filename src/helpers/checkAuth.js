@@ -50,7 +50,6 @@ async function checkAuth(req, res, next) {
     
    } catch (error) {
 
-    console.log(error)
         return res.status(401).json({msg: "No autorizado"})
    }
 }

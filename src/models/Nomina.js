@@ -1,43 +1,39 @@
-import mongoose from 'mongoose';
+import {Schema, model} from 'mongoose';
 
-const NominaSchema = new mongoose.Schema({
+const NominaSchema = new Schema({
   empleado: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Empleado',
     required: true,
   },
   percepciones: {
-    type: mongoose.Schema.Types.Mixed,
+    type: Schema.Types.Mixed,
     default: {},
   },
-  descuentos: {
-    type: mongoose.Schema.Types.Mixed,
+  deducciones: {
+    type: Schema.Types.Mixed,
     default: {},
-  },
-  sueldo_neto: {
-    type: Number,
-    required: true,
   },
   extra: {
-    type: mongoose.Schema.Types.Mixed,
+    type: Schema.Types.Mixed,
     default: {},
   },
   empresa: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: 'Empresa',
     required: true,
   },
   fecha_emision : {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   updated_at: {
     type: Date, 
-    default: Date.now(),
+    default: Date.now,
   },
 
 });
 
-const Nomina = mongoose.model('Nomina', NominaSchema);
+const Nomina = model('Nomina', NominaSchema);
 
 export default Nomina;
