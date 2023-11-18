@@ -36,6 +36,14 @@ const EmpleadoSchema = mongoose.Schema({
         type: Date,
         default: Date.now
     },
+    dias_vacaciones: {
+        type: Number,
+        default: 12
+    },
+    dias_aguinaldo: {
+        type: Number,
+        default: 15
+    },
     updated_at: {
         type: Date, 
         default: Date.now

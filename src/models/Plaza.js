@@ -1,12 +1,12 @@
-import mongoose from "mongoose";
+import { Schema, model } from "mongoose";
 
-const PlazaSchema = mongoose.Schema({
+const PlazaSchema = Schema({
     nombre: {
         type: String,
         required: true,
     },
     categoria: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Categoria",
         required: true
     },
@@ -22,7 +22,7 @@ const PlazaSchema = mongoose.Schema({
         required: true
     },
     habilidades: {
-        type: mongoose.Schema.Types.Mixed,
+        type: Schema.Types.Mixed,
         default: {}
     },
     horario_entrada: {
@@ -34,12 +34,12 @@ const PlazaSchema = mongoose.Schema({
         required: true
     },
     empleado: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Empleado"
     },
     
     empresa:{
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "Empresa"
     },
     created_at: {
@@ -52,6 +52,6 @@ const PlazaSchema = mongoose.Schema({
     }
 })
 
-const Plaza = mongoose.model("Plaza", PlazaSchema, 'plaza')
+const Plaza = model("Plaza", PlazaSchema, 'plaza')
 
 export default Plaza

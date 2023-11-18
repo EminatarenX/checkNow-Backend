@@ -127,11 +127,10 @@ const tarifas = [
   ];
   
   
-const calcularFactorIntegracion = (dias_aginaldo, dias_vacaciones) => {
+const calcularFactorIntegracion = (dias_vacaciones,dias_aginaldo ) => {
     const prima_vacacional = 0.25;
     const diasXprima_vacacional = dias_vacaciones * prima_vacacional;
     const dias_anio = 365;
-
     const suma = diasXprima_vacacional + dias_aginaldo + dias_anio;
     const factor_integracion = suma / dias_anio;
 
@@ -168,6 +167,17 @@ const calcularISR = (sueldo, dias_laborados) => {
     if(ISR_A_RETENER < 0) return 0;
     else return ISR_A_RETENER;
     
+}
+
+const calcularSubsidio = (sueldo, dias_laborados) => {
+    const base_isr = sueldo * dias_laborados;
+
+    const sub = subsidio.find ( sub => {
+        return sub.desde_ingresos < base_isr && sub.hasta_ingresos > base_isr;
+    })
+
+    return sub.cantidad_subsidio;
+
 }
 
 const calcularCuotasObrero = (salario_diario_integrado, dias_trabajados) => {
@@ -228,5 +238,6 @@ const calcularCuotasObrero = (salario_diario_integrado, dias_trabajados) => {
 export {
     calcularFactorIntegracion,
     calcularISR,
-    calcularCuotasObrero
+    calcularCuotasObrero,
+    calcularSubsidio
 }
