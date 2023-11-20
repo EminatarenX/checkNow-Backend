@@ -54,7 +54,6 @@ async function getAllNominas(user) {
     })
 
     const result = await client.send(command)
-
     const urls = await Promise.all(result.Contents.map(async item => {
         return await getFile(item.Key)
     }))
@@ -63,6 +62,7 @@ async function getAllNominas(user) {
 }
 
 async function deleteDocument(key){
+    
     const command = new DeleteObjectCommand({
         Bucket: BUCKET_NAME,
         Key: key
