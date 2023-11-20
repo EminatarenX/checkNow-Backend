@@ -6,6 +6,10 @@ const NominaSchema = new Schema({
     ref: 'Empleado',
     required: true,
   },
+  plaza: {
+    type: Schema.Types.ObjectId,
+    ref: 'Plaza',
+  },
   percepciones: {
     type: Schema.Types.Mixed,
     default: {},
@@ -13,6 +17,14 @@ const NominaSchema = new Schema({
   deducciones: {
     type: Schema.Types.Mixed,
     default: {},
+  },
+  aws_bucket: {
+    type: String,
+    default: '',
+  },
+  aws_key: {
+    type: String,
+    default: '',
   },
   extra: {
     type: Schema.Types.Mixed,

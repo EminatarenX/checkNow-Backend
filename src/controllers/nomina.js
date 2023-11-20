@@ -7,6 +7,9 @@ import {
 import Nomina from "../models/Nomina.js"
 import Empleado from '../models/Empleado.js'
 import Check from '../models/Check.js'
+import { generarNominaPdf } from "../helpers/pdfs/generarNominaPdf.cjs"
+import { uploadFile, getFile } from "../helpers/clientAws.js"
+import { enviarNominaTrabajador } from '../helpers/correos.js'
 
 const generarNomina = async(req, res) => {
     const { empleado: empleado_id } = req.body
@@ -58,13 +61,11 @@ const generarNomina = async(req, res) => {
         const nomina = await Nomina.create({
             empleado: empleado_id,
             empresa: empresa._id,
+            plaza: plaza._id,
             percepciones: {
-                empleado: {
-                    nombre: usuario.nombre + " " + usuario.apellidos,
-                    dias_laborados,
-                    fecha_inicio: checks[0].fecha_entrada,
-                    fecha_fin: checks[checks.length - 1].fecha_entrada,
-                },
+                dias_laborados,
+                fecha_inicio: checks[0].fecha_entrada,
+                fecha_fin: checks[checks.length - 1].fecha_entrada,
                 sueldo: salario_bruto,
                 salario_diario,
                 salario_diario_integrado,
@@ -76,8 +77,27 @@ const generarNomina = async(req, res) => {
                 cuotas_obrero,
             }
         })
-    
-        return res.status(200).json({ nomina })
+
+        const pdf = await generarNominaPdf({nomina, empleado, empresa, plaza, usuario})
+        const emision = nomina.fecha_emision.toString().split('GMT')[0].trim().replace(/ /g, '-')
+        const upload = await uploadFile(pdf, 
+            {nomina: `${usuario.nombre}-${emision}`,
+            empresa: empresa._id })
+        
+        nomina.aws_bucket = upload.uploadParams.Bucket
+        nomina.aws_key = upload.uploadParams.Key
+        nomina.save()
+
+        const signedUrl = await getFile(upload.uploadParams.Key)
+
+        const datosCorreo = {
+            correo: usuario.correo,
+            url: signedUrl,
+            usuario
+        }
+        enviarNominaTrabajador(datosCorreo)
+
+        return res.status(200).json({ nomina, url: signedUrl })
     } catch (error) {
         console.log(error)
         return res.status(500).json({msg: 'hubo un error'})

@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer'
+import fs from 'fs'
 
 const emailRegistro = async(datos) => {
 
@@ -13,11 +14,11 @@ const emailRegistro = async(datos) => {
             user: "5c73a16264e257",
             pass: "b0b35da0d73cce"
           }
-        // service: "gmail",
-        // auth: {
-        //   user: "estudiaconofort@gmail.com",
-        //   pass: "iwmjexmtnnicglsr"
-        // }
+            // service: "gmail",
+            // auth: {
+            //   user: "checknowbussiness@gmail.com",
+            //   pass: "wghmkyxynawsyxaw"
+            // }
     })
 
     const info = await transport.sendMail({
@@ -139,8 +140,8 @@ const emailCambiarPassword = async(datos) => {
     
             // service: "gmail",
             // auth: {
-            //   user: "estudiaconofort@gmail",
-            //   pass: "iwmjexmtnnicglsr"
+            //   user: "checknowbussiness@gmail.com",
+            //   pass: "wghmkyxynawsyxaw"
             // }
         })
 
@@ -247,7 +248,54 @@ const emailCambiarPassword = async(datos) => {
         console.log(error)
     }
 }
+
+const enviarNominaTrabajador = async( datos ) => {
+    const { correo, url, usuario } = datos
+
+    try {
+        const transport = nodemailer.createTransport({
+            host: "sandbox.smtp.mailtrap.io",
+            post: "2525",
+            auth: {
+                user: "5c73a16264e257",
+                pass: "b0b35da0d73cce"
+            }
+    
+            // service: "gmail",
+            // auth: {
+            //   user: "checknowbussiness@gmail.com",
+            //   pass: "wghmkyxynawsyxaw"
+            // }
+        })
+
+        const response = await fetch(url)
+        const responseBuffer = await response.arrayBuffer()
+        const buffer = Buffer.from(responseBuffer)
+    
+
+        const info = await transport.sendMail({
+            from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
+            to: correo,
+            subject: "Recibo de nomina",
+            attachments: [
+                {
+                    filename: `${usuario.nombre}-${usuario.apellidos}-${Date.now().toString().split('T')[0]}.pdf`,
+                    content: buffer,
+                }
+            ]
+        })
+
+        return info
+        
+    } catch (error) {
+        console.log(error)
+       
+    }
+}
+
 export {
     emailRegistro,
-    emailCambiarPassword
+    emailCambiarPassword,
+    enviarNominaTrabajador
 }
+
