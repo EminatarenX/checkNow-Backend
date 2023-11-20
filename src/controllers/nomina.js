@@ -32,11 +32,11 @@ const generarNomina = async(req, res) => {
         quinceDiasAtras.setDate(quinceDiasAtras.getDate() - 15);
     
         const checks = await Check.find({ empleado: empleado_id, fecha_entrada: { $gte: quinceDiasAtras }})
+
+        
         // verificar si aun no se ha hecho una nomina con la misma fecha de inicio y fin
 
-        let dias_laborados = checks[checks.length - 1].fecha_entrada.getDate() - checks[0].fecha_entrada.getDate()
-        if(dias_laborados === 0 && checks.length > 0) dias_laborados = 1
-        else if(dias_laborados === 0 && checks.length === 0) dias_laborados = 0
+        let dias_laborados = checks.length
 
         if(dias_laborados === 0) return res.status(404).json({ mensaje: 'No hay registros de dias laborados en los últimos 15 días' })
         
