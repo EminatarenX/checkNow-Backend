@@ -97,7 +97,17 @@ const generarNomina = async(req, res) => {
         }
         enviarNominaTrabajador(datosCorreo)
 
-        return res.status(200).json({ nomina, url: signedUrl })
+        const nominaPopulate = await Nomina.findById(nomina._id)
+            .populate({
+                path: "empleado",
+                populate: {
+                    path: "usuario"
+                }
+            })
+            .populate("plaza")
+
+
+        return res.status(200).json({ nomina: nominaPopulate, url: signedUrl })
     } catch (error) {
         console.log(error)
         return res.status(500).json({msg: 'hubo un error'})
