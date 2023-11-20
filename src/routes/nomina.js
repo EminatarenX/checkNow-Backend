@@ -6,5 +6,6 @@ const router = Router();
 
 router.post('/', checkAuth, nominaController.generarNomina)
 router.get('/', checkAuth, nominaController.getNominasEmpresa)
+router.delete('/delete/:id', checkAuth, nominaController.eliminarDocumento)
 
 export default router;

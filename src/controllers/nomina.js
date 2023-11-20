@@ -8,7 +8,7 @@ import Nomina from "../models/Nomina.js"
 import Empleado from '../models/Empleado.js'
 import Check from '../models/Check.js'
 import { generarNominaPdf } from "../helpers/pdfs/generarNominaPdf.cjs"
-import { uploadFile, getFile, getAllNominas } from "../helpers/clientAws.js"
+import { uploadFile, getFile, getAllNominas, deleteDocument } from "../helpers/clientAws.js"
 import { enviarNominaTrabajador } from '../helpers/correos.js'
 
 const generarNomina = async(req, res) => {
@@ -129,7 +129,7 @@ const getNominasEmpresa = async(req, res) => {
             })
             .populate("plaza")
 
-        if(!nominas) return res.status(404).json({ mensaje: 'No se encontraron nominas' })
+        if(nominas.length === 0) return res.status(404).json({ msg: 'No se encontraron nominas' })
 
         const urls = await getAllNominas(empresa.id)
         
@@ -151,7 +151,26 @@ const getNominasEmpresa = async(req, res) => {
     }
 }
 
+const eliminarDocumento = async (req, res) => {
+    const { id } = req.params
+
+    try {
+
+        const nomina = await Nomina.findById(id)
+        if(!nomina) return res.status(404).json({ msg: 'No se encontró la nomina' })
+        const result = await deleteDocument(nomina.aws_key)
+        if(result.code === 'AccessDenied') return res.status(400).json({ msg: 'No tienes permiso para eliminar este documento' })
+        await Nomina.findByIdAndDelete(id)
+        return res.status(200).json({ msg: 'Nomina eliminada' })
+        
+    } catch (error) {
+        console.log(error)
+        return res.status(400).json({msg: 'hubo un error'})
+    }
+}
+
 export default {
     generarNomina,
-    getNominasEmpresa
+    getNominasEmpresa,
+    eliminarDocumento
 }
