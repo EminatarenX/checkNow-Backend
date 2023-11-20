@@ -8,7 +8,7 @@ import Nomina from "../models/Nomina.js"
 import Empleado from '../models/Empleado.js'
 import Check from '../models/Check.js'
 import { generarNominaPdf } from "../helpers/pdfs/generarNominaPdf.cjs"
-import { uploadFile, getFile } from "../helpers/clientAws.js"
+import { uploadFile, getFile, getAllNominas } from "../helpers/clientAws.js"
 import { enviarNominaTrabajador } from '../helpers/correos.js'
 
 const generarNomina = async(req, res) => {
@@ -114,8 +114,44 @@ const generarNomina = async(req, res) => {
     }
 
     
+}   
+
+const getNominasEmpresa = async(req, res) => {
+    const { empresa } = req
+
+    try {
+        const nominas = await Nomina.find({ empresa: empresa.id })
+            .populate({
+                path: "empleado",
+                populate: {
+                    path: "usuario"
+                }
+            })
+            .populate("plaza")
+
+        if(!nominas) return res.status(404).json({ mensaje: 'No se encontraron nominas' })
+
+        const urls = await getAllNominas(empresa.id)
+        
+        const nominasConUrl = nominas.map((nomina, index) => {
+            return {
+                ...nomina._doc,
+                url: urls[index]
+            }
+        })
+
+        nominasConUrl.sort((a, b) => {
+            return new Date(b.fecha_emision) - new Date(a.fecha_emision)
+        })
+
+        return res.status(200).json({ nominas: nominasConUrl })
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({msg: 'hubo un error'})
+    }
 }
 
 export default {
-    generarNomina
+    generarNomina,
+    getNominasEmpresa
 }
