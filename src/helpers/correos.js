@@ -277,6 +277,7 @@ const enviarNominaTrabajador = async( datos ) => {
             from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
             to: correo,
             subject: "Recibo de nomina",
+            text: "Hemos adjuntado tu nomina en este correo, por favor revisalo y contacta con tu empresa si hay algún error, estamos para ayudarte.",
             attachments: [
                 {
                     filename: `${usuario.nombre}-${usuario.apellidos}-${Date.now().toString().split('T')[0]}.pdf`,

@@ -21,7 +21,7 @@ const client = new S3Client({
 async function uploadFile(file, params) {
     const { empresa, nomina } = params
     
-    const folder = `nominas/${empresa}`
+    const folder = `nominas/${empresa}.pdf`
     const Body = Buffer.isBuffer(file) ? file : fs.createReadStream(file);
 
     const uploadParams ={

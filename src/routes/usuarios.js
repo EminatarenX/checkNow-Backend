@@ -11,8 +11,8 @@ router.get("/", usuariosController.obtenerUsuarios)
 router.post("/registrar-datos", checkAuth ,usuariosController.completarPerfil)
 router.post("/login", usuariosController.iniciarSesion)
 router.get("/confirmar/:token", usuariosController.confirmarUsuario)
-router.post("/recovery", checkAuth, usuariosController.solicitarCambioPassword)
-router.put("/recovery/:token",  checkAuth, usuariosController.cambiarPassword)
+router.post("/recovery",  usuariosController.solicitarCambioPassword)
+router.put("/recovery/:token", usuariosController.cambiarPassword)
 router.get("/perfil", checkAuth, usuariosController.obtenerPerfil)
 
 export default router
