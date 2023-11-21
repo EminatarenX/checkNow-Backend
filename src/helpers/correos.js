@@ -8,17 +8,17 @@ const emailRegistro = async(datos) => {
     try{
 
     const transport = nodemailer.createTransport({
-        host: "sandbox.smtp.mailtrap.io",
-        post: "2525",
-        auth: {
-            user: "5c73a16264e257",
-            pass: "b0b35da0d73cce"
-          }
-            // service: "gmail",
-            // auth: {
-            //   user: "checknowbussiness@gmail.com",
-            //   pass: "wghmkyxynawsyxaw"
-            // }
+        // host: "sandbox.smtp.mailtrap.io",
+        // post: "2525",
+        // auth: {
+        //     user: "5c73a16264e257",
+        //     pass: "b0b35da0d73cce"
+        //   }
+            service: "gmail",
+            auth: {
+              user: "checknowbussiness@gmail.com",
+              pass: "wghmkyxynawsyxaw"
+            }
     })
 
     const info = await transport.sendMail({
@@ -131,18 +131,18 @@ const emailCambiarPassword = async(datos) => {
         try{
 
         const transport = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            post: "2525",
-            auth: {
-                user: "5c73a16264e257",
-                pass: "b0b35da0d73cce"
-            }
-    
-            // service: "gmail",
+            // host: "sandbox.smtp.mailtrap.io",
+            // post: "2525",
             // auth: {
-            //   user: "checknowbussiness@gmail.com",
-            //   pass: "wghmkyxynawsyxaw"
+            //     user: "5c73a16264e257",
+            //     pass: "b0b35da0d73cce"
             // }
+    
+            service: "gmail",
+            auth: {
+              user: "checknowbussiness@gmail.com",
+              pass: "wghmkyxynawsyxaw"
+            }
         })
 
         const info = await transport.sendMail({
@@ -254,18 +254,18 @@ const enviarNominaTrabajador = async( datos ) => {
 
     try {
         const transport = nodemailer.createTransport({
-            host: "sandbox.smtp.mailtrap.io",
-            post: "2525",
-            auth: {
-                user: "5c73a16264e257",
-                pass: "b0b35da0d73cce"
-            }
-    
-            // service: "gmail",
+            // host: "sandbox.smtp.mailtrap.io",
+            // post: "2525",
             // auth: {
-            //   user: "checknowbussiness@gmail.com",
-            //   pass: "wghmkyxynawsyxaw"
+            //     user: "5c73a16264e257",
+            //     pass: "b0b35da0d73cce"
             // }
+    
+            service: "gmail",
+            auth: {
+              user: "checknowbussiness@gmail.com",
+              pass: "wghmkyxynawsyxaw"
+            }
         })
 
         const response = await fetch(url)
