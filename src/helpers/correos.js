@@ -1,6 +1,5 @@
 import nodemailer from 'nodemailer'
-import fs from 'fs'
-
+import axios from 'axios'
 const emailRegistro = async(datos) => {
 
     const { correo, token} = datos
@@ -268,11 +267,9 @@ const enviarNominaTrabajador = async( datos ) => {
             }
         })
 
-        const response = await fetch(url)
-        const responseBuffer = await response.arrayBuffer()
-        const buffer = Buffer.from(responseBuffer)
-    
-
+        const response = await axios.get(url, { responseType: 'arraybuffer' });
+        const buffer = Buffer.from(response.data, 'binary');
+        
         const info = await transport.sendMail({
             from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
             to: correo,
