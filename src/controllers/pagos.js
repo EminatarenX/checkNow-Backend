@@ -86,16 +86,6 @@ const webhook = async (req, res) => {
             // Aquí puedes agregar el código para manejar la finalización de la sesión de Checkout
             break;
         case 'invoice.payment_succeeded':
-            // const payment = event.data.object;
-           
-
-            // const invoice = await stripe.invoices.create({
-            //     customer: payment.customer,
-            //     collection_method: 'send_invoice',
-            //     days_until_due: 30,
-            // })
-            // await stripe.invoices.sendInvoice(invoice.id)
-            // Aquí puedes agregar el código para manejar un pago exitoso
 
             break;
         case 'invoice.payment_failed':
