@@ -8,18 +8,18 @@ import categoriasRouter from './src/routes/categoria.js'
 import plazasRouter from './src/routes/plazas.js'
 import checksRouter from './src/routes/check.js'
 import nominasRouter from './src/routes/nomina.js'
+import pagosRouter from './src/routes/webhook.js'
+import { revisarPagos } from './src/tareas/payments.js'
 
 import { ConectarDB } from './src/db/connection.js'
 import cors from 'cors'
 config()
-
 ConectarDB()
+revisarPagos()
 
 
 const app = express()
 const puerto = process.env.PORT || 4000
-
-app.use(express.json())
 
 const origin = process.env.FRONTEND_URL
 app.use(cors({
@@ -27,14 +27,15 @@ app.use(cors({
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 }))
 
-app.use('/api/usuarios', usuariosRouter);
-app.use('/api/empresas', empresasRouter);
-app.use('/api/departamentos', departamentosRouter);
-app.use('/api/empleados', empleadosRouter);
-app.use('/api/categorias', categoriasRouter);
-app.use('/api/plazas', plazasRouter);
-app.use('/api/checks', checksRouter);
-app.use('/api/nominas', nominasRouter);
+app.use('/api/usuarios',express.json(), usuariosRouter);
+app.use('/api/empresas',express.json(), empresasRouter);
+app.use('/api/departamentos',express.json(), departamentosRouter);
+app.use('/api/empleados',express.json(), empleadosRouter);
+app.use('/api/categorias',express.json(), categoriasRouter);
+app.use('/api/plazas',express.json(), plazasRouter);
+app.use('/api/checks',express.json(), checksRouter);
+app.use('/api/nominas',express.json(), nominasRouter);
+app.use('/api/pagos', pagosRouter);
 
 const servidor = app.listen(puerto, () => {
     console.log('Servidor corriendo en puerto', puerto)

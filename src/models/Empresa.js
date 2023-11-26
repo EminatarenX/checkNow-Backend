@@ -44,15 +44,15 @@ const empresaSchema = new mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Departamento'
     }
-  ]
+  ],
+  stripeCustomerId: {
+    type: String,
+    default: null
+  }
 
-  // plazas: [
-  //   {
-  //     type: mongoose.Schema.Types.ObjectId,
-  //     ref: 'Plaza'
-  //   }
-  // ]
-
+}, {
+  timestamps: true,
+  versionKey: false
 });
 
 

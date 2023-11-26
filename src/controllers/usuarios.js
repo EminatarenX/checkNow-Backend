@@ -1,7 +1,12 @@
+import { config } from 'dotenv'
+config()
 import bcrypt from 'bcrypt'
 import { generarID } from "../helpers/generarId.js"
 import { emailRegistro, emailCambiarPassword } from "../helpers/correos.js"
 import jwt from 'jsonwebtoken'
+import Stripe from "stripe";
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+import Pago from "../models/Pagos.js";
 
 // modelos
 import Usuario from "../models/Usuario.js"
@@ -127,7 +132,7 @@ const confirmarUsuario = async (req, res) => {
 const completarPerfil = async (req, res) => {
     const { nombre, apellidos, telefono, direccion, role } = req.body
     
-    const { id: usuario_id } = req.usuario
+    const { id: usuario_id, correo } = req.usuario
 
 
     try {
@@ -153,8 +158,15 @@ const completarPerfil = async (req, res) => {
             await empleado.save()
 
         } else {
+            const customer = await stripe.customers.create({
+                email: correo,
+                name: `${nombre} ${apellidos}`,
+                phone: telefono,
+            })
+
             const empresa = new Empresa({
                 creador: usuario_id,
+                stripeCustomerId: customer.id
             });
             
             await empresa.save()
@@ -253,6 +265,12 @@ const obtenerPerfil = async (req, res) => {
     
     if(req.empresa){
         const {id : empresa} = req.empresa
+        let pago = {}
+        const pagos = await Pago.find({id_user: empresa}).sort({createdAt: -1}).limit(1)
+        
+        if(pagos.length > 0){
+            pago = pagos[0]
+        }
         return res.status(200).json({usuario: {
             id,
             correo,
@@ -264,7 +282,8 @@ const obtenerPerfil = async (req, res) => {
             direccion,
             role,
             telefono,
-            empresa
+            empresa,
+            payment: pago
         }})
     
     }else {
