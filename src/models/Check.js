@@ -20,7 +20,7 @@ const CheckSchema = mongoose.Schema({
     },
     comentarios: {
         type: String,
-        enum: ["Puntual", "No asistio", "Tarde", "Permiso"],
+        
     }
 })
 
