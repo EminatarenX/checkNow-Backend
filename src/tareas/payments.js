@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export function revisarPagos () {
     console.log('Corriendo tarea')
-    cron.schedule('* * * * *', async () => {
+    cron.schedule('0 0 * * *', async () => {
         try {
             const pagos = await Pago.find()
 

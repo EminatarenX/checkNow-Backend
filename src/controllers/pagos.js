@@ -73,7 +73,7 @@ const webhook = async (req, res) => {
                 days_until_due: 30,
             })
             await stripe.invoices.sendInvoice(invoice.id)
-
+        
             await Pago.create({
                 id_session: session.id,
                 subscription_id: session.subscription,
