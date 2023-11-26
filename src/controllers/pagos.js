@@ -10,9 +10,7 @@ const endpointSecret = String(process.env.STRIPE_WEBHOOK_SECRET);
 const prices = async (req, res) => {
     const prices = await stripe.prices.list();
 
-    const priceId = prices.data.find( price => price.unit_amount === 499900).id
-
-    return res.status(200).json({price:  priceId})
+    return res.status(200).json({prices: prices.data})
 }
 
 
