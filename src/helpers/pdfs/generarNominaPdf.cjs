@@ -17,10 +17,10 @@ const generarNominaPdf = async (body) => {
       fecha_inicio: nom_body.percepciones.fecha_inicio.toLocaleDateString(),
       fecha_fin: nom_body.percepciones.fecha_fin.toLocaleDateString(),
       dias_laborados: nom_body.percepciones.dias_laborados,
-      // sueldo: nom_body.percepciones.sueldo.toFixed(2),
+      sueldo_bruto: nom_body.percepciones.sueldo.toFixed(2),
       salario_diario: nom_body.percepciones.salario_diario.toFixed(2),
       salario_diario_integrado:
-        nom_body.percepciones.salario_diario_integrado.toFixed(2),
+      nom_body.percepciones.salario_diario_integrado.toFixed(2),
       subsidio: nom_body.percepciones.subsidio.toFixed(2),
       // neto: nom_body.percepciones.neto.toFixed(2),
     },
@@ -30,6 +30,8 @@ const generarNominaPdf = async (body) => {
     },
     fecha_emision: nom_body.fecha_emision.toLocaleDateString(),
   };
+
+  
 
   for (const key in nomina.percepciones) {
     if (key === "fecha_inicio" || key === "fecha_fin") {

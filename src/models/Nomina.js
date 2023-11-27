@@ -26,10 +26,12 @@ const NominaSchema = new Schema({
     type: String,
     default: '',
   },
-  extra: {
-    type: Schema.Types.Mixed,
-    default: {},
-  },
+  extra: [
+    {
+      name: String,
+      value: String,
+    }
+  ],
   empresa: {
     type: Schema.Types.ObjectId,
     ref: 'Empresa',
