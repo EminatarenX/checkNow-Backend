@@ -54,7 +54,7 @@ const generarNominaPdf = async (body) => {
     });
   }
 
-  let total_percepciones = nomina.neto;
+  let total_percepciones = Number(nomina.neto) + Number(nomina.percepciones.subsidio);
   let total_deducciones = 0;
   let last_y = 0;
 
