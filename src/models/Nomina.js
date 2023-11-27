@@ -27,21 +27,9 @@ const NominaSchema = new Schema({
     default: '',
   },
     extra: {
-      percepciones: [
-        {
-          name: String,
-          value: String,
-          default: {},
-        },
-      ],
-      deducciones: [
-        {
-          name: String,
-          value: String,
-          default: {},
-        },
-      ],
-    },
+    type: Schema.Types.ObjectId,
+    ref: 'Extra',
+  },
   empresa: {
     type: Schema.Types.ObjectId,
     ref: 'Empresa',
