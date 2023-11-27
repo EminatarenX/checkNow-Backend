@@ -39,6 +39,10 @@ const NominaSchema = new Schema({
     type: Date,
     default: Date.now,
   },
+  quincena: {
+    type: Number,
+    default: 1,
+  },
   updated_at: {
     type: Date, 
     default: Date.now,
