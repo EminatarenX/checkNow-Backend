@@ -1,14 +1,13 @@
 import { Schema, model } from "mongoose";
 
 const ExtraSchema = new Schema({
-    empresa: {
-        type: Schema.Types.ObjectId,
-        ref: 'Empresa',
-        required: true,
-    },
     empleado: {
         type: Schema.Types.ObjectId,
         ref: 'Empleado',   
+      },
+    nombre: {
+        type: String,
+        required: true,
     },
     percepciones: [
         {

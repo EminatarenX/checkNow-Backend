@@ -27,8 +27,8 @@ const NominaSchema = new Schema({
     default: '',
   },
     extra: {
-    type: Schema.Types.ObjectId,
     ref: 'Extra',
+    default: {}
   },
   empresa: {
     type: Schema.Types.ObjectId,
