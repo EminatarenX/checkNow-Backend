@@ -30,7 +30,8 @@ const NominaSchema = new Schema({
     {
       name: String,
       value: String,
-    }
+      default: {},
+    },
   ],
   empresa: {
     type: Schema.Types.ObjectId,
