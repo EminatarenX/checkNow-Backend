@@ -11,6 +11,9 @@
     "crear-cr": "node scriptModelos.js",
     "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --detectOpenHandles"
   },
+  "engines": {
+    "node": ">=20.10.0 <21.0.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
