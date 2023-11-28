@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 
-const ExtraSchema = new Schema({
+export const ExtraSchema = new Schema({
     empleado: {
         type: Schema.Types.ObjectId,
         ref: 'Empleado',   
@@ -25,6 +25,6 @@ const ExtraSchema = new Schema({
       ],
 })
 
-const Extra = model("Extra", ExtraSchema, Extra);
+const Extra = model("Extra", ExtraSchema, "extra");
 
 export default Extra;

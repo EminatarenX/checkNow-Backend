@@ -1,4 +1,5 @@
 import {Schema, model} from 'mongoose';
+import { ExtraSchema } from './NominaPersonalizada.js';
 
 const NominaSchema = new Schema({
   empleado: {
@@ -26,10 +27,7 @@ const NominaSchema = new Schema({
     type: String,
     default: '',
   },
-    extra: {
-    ref: 'Extra',
-    default: {}
-  },
+  extra: ExtraSchema,
   empresa: {
     type: Schema.Types.ObjectId,
     ref: 'Empresa',
@@ -49,6 +47,7 @@ const NominaSchema = new Schema({
   },
 
 });
+
 
 const Nomina = model('Nomina', NominaSchema);
 
