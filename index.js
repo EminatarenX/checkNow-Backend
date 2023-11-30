@@ -54,17 +54,18 @@ const io = new SocketServer(servidor, {
 io.on('connection', socket => {
 
     socket.on('solicitudes', (empresa) => {
-        socket.join(empresa)
+            socket.join(empresa)
+    })
+
+    socket.on('solicitud', (data) => {
+        const empresa = data.empresa
+        socket.to(empresa).emit('solicitud recibida', data)
     })
 
     socket.on('checks admin', (empresa) => {
         socket.join(empresa)
     })
     
-    socket.on('enviar solicitud', (data) => {
-        const empresa = data.empresa
-        io.to(empresa).emit('solicitud recibida', data)
-    })
 
     socket.on('nueva entrada', (check) => {
         const empresa = check.empresa
