@@ -98,7 +98,6 @@ const generarNomina = async (req, res) => {
 
     const pdf = await generarNominaPdf({
       nomina,
-      empleado,
       empresa,
       plaza,
       usuario,

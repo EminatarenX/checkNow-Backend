@@ -3,7 +3,7 @@ const pdfkit = require("pdfkit");
 const getStream = require("get-stream");
 
 const generarNominaPdf = async (body) => {
-  const { empleado, empresa, plaza, usuario, nomina: nom_body } = body;
+  const { empresa, plaza, usuario, nomina: nom_body } = body;
 
   let percepciones = [];
   let deducciones = [];
