@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "create": "node script.js",
-    "dev": "nodemon index.js",
+    "dev": "nodemon  index.js",
     "start": "node index.js",
     "crear-cr": "node scriptModelos.js",
     "test": "set NODE_OPTIONS=--experimental-vm-modules && jest --detectOpenHandles"

@@ -20,7 +20,8 @@ const createCheckoutSession = async (req, res) => {
 
   const checkoutSession = await stripe.checkout.sessions.create({
     mode: "subscription",
-    payment_method_types: ["card"],
+    payment_method_types: ['card'],
+    billing_address_collection: 'auto',
     line_items: [
       {
         price: price_id,
@@ -41,54 +42,85 @@ const webhook = async (req, res) => {
 
   const payload = req.body
   const signature = req.headers['stripe-signature']
-  console.log(endpointSecret)
-
   let event;
 
   try {
     event = await stripe.webhooks.constructEvent(payload, signature, endpointSecret)
-    console.log('Received event:', event)
   } catch (error) {
     console.log("Error recibido: ", error)
     return res.status(400).send(`Webhook error: ${error.message}`)
   }
+  let subscription;
+  let status;
+  let session
+  let amount
+  let usuario
+  let empresa
 
   switch (event.type) {
+
+    case 'customer.subscription.trial_will_end':
+      subscription = event.data.object;
+      status = subscription.status;
+      console.log('Subscription status:', status);
+      break;
+
+    case 'customer.subscription.deleted':
+      subscription = event.data.object;
+      status = subscription.status;
+      console.log('Subscription status:', status);
+      break;
+
+    case 'customer.subscription.created':
+      subscription = event.data.object;
+      status = subscription.status;
+      console.log('Subscription status:', status);
+      break;
+
+    case 'customer.subscription.updated':
+      subscription = event.data.object;
+      status = subscription.status;
+      console.log('Subscription status:', status);
+      break;
+
+
     case 'checkout.session.completed':
-      const session = event.data.object;
+      console.log('Checkout session completed')
+     session = event.data.object;
 
-      const amount = session.amount_total / 100;
-      const usuario = await Usuario.findOne({ correo: session.customer_details.email })
-      const empresa = await Empresa.findOne({ creador: usuario._id })
+     amount = session.amount_total / 100;
+     usuario = await Usuario.findOne({ correo: session.customer_details.email })
+     empresa = await Empresa.findOne({ creador: usuario._id })
 
-      await stripe.invoiceItems.create({
-        customer: session.customer,
-        amount: session.amount_total, // El monto en centavos
-        currency: session.currency, // La moneda
-        description: 'Pago de membresía'
-      });
 
-      //const invoice = await stripe.invoices.create({
-      //  customer: session.customer,
-      //  collection_method: 'send_invoice',
-      //  days_until_due: 30,
-      //})
-      //await stripe.invoices.sendInvoice(invoice.id)
+     await stripe.invoiceItems.create({
+       customer: session.customer,
+       amount: session.amount_total, // El monto en centavos
+       currency: session.currency, // La moneda
+       description: 'Pago de membresía'
+     });
 
-      await Pago.create({
-        id_session: session.id,
-        subscription_id: session.subscription,
-        customer: session.customer,
-        id_user: empresa._id,
-        payment_status: session.payment_status,
-        amount,
-      })
+     const invoice = await stripe.invoices.create({
+      customer: session.customer,
+      collection_method: 'send_invoice',
+      days_until_due: 30,
+     })
+     await stripe.invoices.sendInvoice(invoice.id)
 
-      // Aquí puedes agregar el código para manejar la finalización de la sesión de Checkout
-      break;
-    case 'invoice.payment_succeeded':
+     await Pago.create({
+       id_session: session.id,
+       subscription_id: session.subscription,
+       customer: session.customer,
+       id_user: empresa._id,
+       payment_status: session.payment_status,
+       amount,
+     })
 
-      break;
+     // Aquí puedes agregar el código para manejar la finalización de la sesión de Checkout
+     break;
+    //case 'invoice.payment_succeeded':
+
+    break;
     case 'invoice.payment_failed':
       const failedPayment = event.data.object;
       console.log('Payment failed:', failedPayment);
@@ -99,7 +131,7 @@ const webhook = async (req, res) => {
       break;
   }
 
-  res.status(200).send()
+  res.send()
 }
 
 
