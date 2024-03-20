@@ -4,54 +4,54 @@ import Empresa from "../models/Empresa.js";
 import Empleado from "../models/Empleado.js";
 
 async function checkAuth(req, res, next) {
-    let token;
+  let token;
 
-   try {
-    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
-        token = req.headers.authorization.split(" ")[1]
+  try {
+    if (req.headers.authorization && req.headers.authorization.startsWith("Bearer")) {
+      token = req.headers.authorization.split(" ")[1]
 
-        const {id} = await jwt.verify(token, process.env.JWT_SECRET)
+      const { id } = await jwt.verify(token, process.env.JWT_SECRET)
 
-        let usuario = await Usuario.findById(id)
+      let usuario = await Usuario.findById(id)
 
-        if(!usuario) {
-            return res.status(401).json({msg: "No autorizado"})
-        }
+      if (!usuario) {
+        return res.status(401).json({ msg: "No autorizado" })
+      }
 
-        req.usuario = usuario
-        
+      req.usuario = usuario
 
-        if(usuario.role !== "admin") {
-            const empleado = await Empleado.findOne({usuario: id})
-                .populate("empresa")
-                .populate("usuario")
-                .populate("plaza")
-           
-            if(!empleado) return next()
 
-            req.empleado = empleado
-            return next()
-        }
-    
-        const empresa = await Empresa.findOne({creador: id})
-        
-        if(!empresa) {
-            return next()
-        }
+      if (usuario.role !== "admin") {
+        const empleado = await Empleado.findOne({ usuario: id })
+          .populate("empresa")
+          .populate("usuario")
+          .populate("plaza")
 
-        req.empresa = empresa
+        if (!empleado) return next()
 
+        req.empleado = empleado
         return next()
+      }
+
+      const empresa = await Empresa.findOne({ creador: id })
+
+      if (!empresa) {
+        return next()
+      }
+
+      req.empresa = empresa
+
+      return next()
 
 
-    }else {
-        return res.status(401).json({msg: "No autorizado"})
+    } else {
+      return res.status(401).json({ msg: "No autorizado" })
     }
-    
-   } catch (error) {
 
-        return res.status(401).json({msg: "No autorizado"})
-   }
+  } catch (error) {
+
+    return res.status(401).json({ msg: "No autorizado" })
+  }
 }
 
 export { checkAuth }

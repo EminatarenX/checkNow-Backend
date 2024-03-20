@@ -1,7 +1,8 @@
 import nodemailer from 'nodemailer'
 import axios from 'axios'
 
-
+const user = process.env.GMAIL_USER
+const pass = process.env.GMAIL_PASS
 
 
 const emailRegistro = async (datos) => {
@@ -19,8 +20,8 @@ const emailRegistro = async (datos) => {
       //   }
       service: "gmail",
       auth: {
-        user: "checknowbussiness@gmail.com",
-        pass: "kugjsuhtiduwybnh"
+        user,
+        pass
       }
     })
 
@@ -145,8 +146,8 @@ const emailCambiarPassword = async (datos) => {
 
       service: "gmail",
       auth: {
-        user: "checknowbussiness@gmail.com",
-        pass: "kugjsuhtiduwybnh"
+        user,
+        pass
       }
     })
 
@@ -255,6 +256,7 @@ const emailCambiarPassword = async (datos) => {
 }
 
 const enviarNominaTrabajador = async (datos) => {
+  console.log({ user, pass })
   const { correo, url, usuario } = datos
 
   try {
@@ -268,8 +270,8 @@ const enviarNominaTrabajador = async (datos) => {
 
       service: "gmail",
       auth: {
-        user: "checknowbussiness@gmail.com",
-        pass: "kugjsuhtiduwybnh"
+        user,
+        pass
       }
     })
 

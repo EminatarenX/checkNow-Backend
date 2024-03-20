@@ -55,7 +55,7 @@ async function getAllNominas(user) {
 
 
   const result = await client.send(command)
-  console.log(result.Contents)
+
   const urls = await Promise.all(result.Contents.map(async item => {
     return await getFile(item.Key)
   }))

@@ -103,7 +103,7 @@ const generarNominaPdf = async (body) => {
   doc.underline(25, last_y + 10, 550, 12, { color: "#CCCCCC" });
   doc.moveDown(0.5);
   doc
-    .text(`Total deducciones: ${total_deducciones}`, 300, last_y + 10)
+    .text(`Total deducciones: ${total_deducciones.toFixed(2)}`, 300, last_y + 10)
     .text(
       `Recibi de ${empresa.nombre} la cantidad de $${nomina.percepciones.neto} por concepto de sueldo correspondiente al periodo del ${nomina.percepciones.fecha_inicio} al ${nomina.percepciones.fecha_fin}`,
       25,
