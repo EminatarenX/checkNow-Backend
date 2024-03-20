@@ -1,4 +1,4 @@
-import { S3Client, PutObjectCommand, ListObjectsCommand, GetObjectCommand, DeleteObjectCommand} from '@aws-sdk/client-s3'
+import { S3Client, PutObjectCommand, ListObjectsCommand, GetObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3'
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { config } from 'dotenv'
 import fs from 'fs'
@@ -11,72 +11,74 @@ const BUCKET_NAME = process.env.AWS_BUCKET
 
 
 const client = new S3Client({
-    region,
-    credentials: {
-        accessKeyId: ACCESS_KEY_ID,
-        secretAccessKey: SECRET_ACCESS_KEY
-    }
+  region,
+  credentials: {
+    accessKeyId: ACCESS_KEY_ID,
+    secretAccessKey: SECRET_ACCESS_KEY
+  }
 })
 
 async function uploadFile(file, params) {
-    const { empresa, nomina } = params
-    
-    const folder = `nominas/${empresa}`
-    const Body = Buffer.isBuffer(file) ? file : fs.createReadStream(file);
+  const { empresa, nomina } = params
 
-    const uploadParams ={
-        Bucket: BUCKET_NAME,
-        Key: `${folder}/${nomina}`,
-        Body
-    }
+  const folder = `nominas/${empresa}`
+  const Body = Buffer.isBuffer(file) ? file : fs.createReadStream(file);
 
-    const command = new PutObjectCommand(uploadParams)
-    const result = await client.send(command)
+  const uploadParams = {
+    Bucket: BUCKET_NAME,
+    Key: `${folder}/${nomina}`,
+    Body
+  }
 
-    return {result, uploadParams}
+  const command = new PutObjectCommand(uploadParams)
+  const result = await client.send(command)
+
+  return { result, uploadParams }
 }
 
 async function getFile(filename) {
-    const command = new GetObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: filename
-    })
+  const command = new GetObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: filename
+  })
 
-    const signedUrl = await getSignedUrl(client, command, {expiresIn: 3600})
+  const signedUrl = await getSignedUrl(client, command, { expiresIn: 3600 })
 
-    return signedUrl
+  return signedUrl
 }
 
 async function getAllNominas(user) {
-    const command = new ListObjectsCommand({
-        Bucket: BUCKET_NAME,
-        Prefix: `nominas/${user}`
-    })
+  const command = new ListObjectsCommand({
+    Bucket: BUCKET_NAME,
+    Prefix: `nominas/${user}`
+  })
 
-    const result = await client.send(command)
-    const urls = await Promise.all(result.Contents.map(async item => {
-        return await getFile(item.Key)
-    }))
-    return urls
+
+  const result = await client.send(command)
+  console.log(result.Contents)
+  const urls = await Promise.all(result.Contents.map(async item => {
+    return await getFile(item.Key)
+  }))
+  return urls
 
 }
 
-async function deleteDocument(key){
-    
-    const command = new DeleteObjectCommand({
-        Bucket: BUCKET_NAME,
-        Key: key
-    })
+async function deleteDocument(key) {
 
-    const result = await client.send(command)
+  const command = new DeleteObjectCommand({
+    Bucket: BUCKET_NAME,
+    Key: key
+  })
 
-    return result
+  const result = await client.send(command)
+
+  return result
 }
 
 export {
-    client,
-    uploadFile,
-    getFile,
-    getAllNominas,
-    deleteDocument
+  client,
+  uploadFile,
+  getFile,
+  getAllNominas,
+  deleteDocument
 }

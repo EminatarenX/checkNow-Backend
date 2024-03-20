@@ -154,7 +154,9 @@ const getNominasEmpresa = async (req, res) => {
       })
       .populate("plaza");
 
-    if (nominas.length === 0)
+
+
+    if (nominas.length === 0 || !nominas)
       return res.status(404).json({ msg: "No se encontraron nominas" });
 
     const urls = await getAllNominas(empresa.id);

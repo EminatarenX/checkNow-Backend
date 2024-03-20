@@ -1,31 +1,35 @@
 import nodemailer from 'nodemailer'
 import axios from 'axios'
-const emailRegistro = async(datos) => {
 
-    const { correo, token} = datos
 
-    try{
+
+
+const emailRegistro = async (datos) => {
+
+  const { correo, token } = datos
+
+  try {
 
     const transport = nodemailer.createTransport({
-        // host: "sandbox.smtp.mailtrap.io",
-        // post: "2525",
-        // auth: {
-        //     user: "5c73a16264e257",
-        //     pass: "b0b35da0d73cce"
-        //   }
-            service: "gmail",
-            auth: {
-              user: "checknowbussiness@gmail.com",
-              pass: "wghmkyxynawsyxaw"
-            }
+      // host: "sandbox.smtp.mailtrap.io",
+      // post: "2525",
+      // auth: {
+      //     user: "5c73a16264e257",
+      //     pass: "b0b35da0d73cce"
+      //   }
+      service: "gmail",
+      auth: {
+        user: "checknowbussiness@gmail.com",
+        pass: "kugjsuhtiduwybnh"
+      }
     })
 
-    const info = await transport.sendMail({
-        from: '"Check-Now - Administra tu "negocio" <no-reply@checknow.com>',
-        to: correo,
-        subject: "Check-Now confirma tu cuenta",
-        text: "Bienvenido a Check-Now",
-        html: `
+    await transport.sendMail({
+      from: '"Check-Now - Administra tu "negocio" <no-reply@checknow.com>',
+      to: correo,
+      subject: "Check-Now confirma tu cuenta",
+      text: "Bienvenido a Check-Now",
+      html: `
         <!DOCTYPE html>
         <html>
         <head>
@@ -118,38 +122,40 @@ const emailRegistro = async(datos) => {
         </html>
         `
     })
-    }catch(error){
+    console.log('Correo enviado')
+  } catch (error) {
+    console.log('No se envio el correo')
     console.log(error)
-    }
+  }
 }
 
-const emailCambiarPassword = async(datos) => {
-    
-        const { correo, token} = datos
+const emailCambiarPassword = async (datos) => {
 
-        try{
+  const { correo, token } = datos
 
-        const transport = nodemailer.createTransport({
-            // host: "sandbox.smtp.mailtrap.io",
-            // post: "2525",
-            // auth: {
-            //     user: "5c73a16264e257",
-            //     pass: "b0b35da0d73cce"
-            // }
-    
-            service: "gmail",
-            auth: {
-              user: "checknowbussiness@gmail.com",
-              pass: "wghmkyxynawsyxaw"
-            }
-        })
+  try {
 
-        const info = await transport.sendMail({
-            from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
-            to: correo,
-            subject: "Check-Now Cambia tu contraseña",
-            text: "Bienvenido a Check-Now",
-            html: `
+    const transport = nodemailer.createTransport({
+      // host: "sandbox.smtp.mailtrap.io",
+      // post: "2525",
+      // auth: {
+      //     user: "5c73a16264e257",
+      //     pass: "b0b35da0d73cce"
+      // }
+
+      service: "gmail",
+      auth: {
+        user: "checknowbussiness@gmail.com",
+        pass: "kugjsuhtiduwybnh"
+      }
+    })
+
+    const info = await transport.sendMail({
+      from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
+      to: correo,
+      subject: "Check-Now Cambia tu contraseña",
+      text: "Bienvenido a Check-Now",
+      html: `
             <!DOCTYPE html>
             <html>
             <head>
@@ -242,58 +248,58 @@ const emailCambiarPassword = async(datos) => {
             </body>
             </html>
             `
-        })
-    }catch(error){
-        console.log(error)
-    }
+    })
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-const enviarNominaTrabajador = async( datos ) => {
-    const { correo, url, usuario } = datos
+const enviarNominaTrabajador = async (datos) => {
+  const { correo, url, usuario } = datos
 
-    try {
-        const transport = nodemailer.createTransport({
-            // host: "sandbox.smtp.mailtrap.io",
-            // post: "2525",
-            // auth: {
-            //     user: "5c73a16264e257",
-            //     pass: "b0b35da0d73cce"
-            // }
-    
-            service: "gmail",
-            auth: {
-              user: "checknowbussiness@gmail.com",
-              pass: "wghmkyxynawsyxaw"
-            }
-        })
+  try {
+    const transport = nodemailer.createTransport({
+      // host: "sandbox.smtp.mailtrap.io",
+      // post: "2525",
+      // auth: {
+      //     user: "5c73a16264e257",
+      //     pass: "b0b35da0d73cce"
+      // }
 
-        const response = await axios.get(url, { responseType: 'arraybuffer' });
-        const buffer = Buffer.from(response.data, 'binary');
-        
-        const info = await transport.sendMail({
-            from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
-            to: correo,
-            subject: "Recibo de nomina",
-            text: "Hemos adjuntado tu nomina en este correo, por favor revisalo y contacta con tu empresa si hay algún error, estamos para ayudarte.",
-            attachments: [
-                {
-                    filename: `${usuario.nombre}-${usuario.apellidos}-${Date.now().toString().split('T')[0]}.pdf`,
-                    content: buffer,
-                }
-            ]
-        })
+      service: "gmail",
+      auth: {
+        user: "checknowbussiness@gmail.com",
+        pass: "kugjsuhtiduwybnh"
+      }
+    })
 
-        return info
-        
-    } catch (error) {
-        console.log(error)
-       
-    }
+    const response = await axios.get(url, { responseType: 'arraybuffer' });
+    const buffer = Buffer.from(response.data, 'binary');
+
+    const info = await transport.sendMail({
+      from: '"Check-now - Administra tu negocio" <no-reply@checknow.com>',
+      to: correo,
+      subject: "Recibo de nomina",
+      text: "Hemos adjuntado tu nomina en este correo, por favor revisalo y contacta con tu empresa si hay algún error, estamos para ayudarte.",
+      attachments: [
+        {
+          filename: `${usuario.nombre}-${usuario.apellidos}-${Date.now().toString().split('T')[0]}.pdf`,
+          content: buffer,
+        }
+      ]
+    })
+
+    return info
+
+  } catch (error) {
+    console.log(error)
+
+  }
 }
 
 export {
-    emailRegistro,
-    emailCambiarPassword,
-    enviarNominaTrabajador
+  emailRegistro,
+  emailCambiarPassword,
+  enviarNominaTrabajador
 }
 
